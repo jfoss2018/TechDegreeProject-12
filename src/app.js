@@ -36,12 +36,21 @@ T.get('search/tweets', params, function(err, data, response) {
   console.log(data.statuses[0].user);
 });
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 
 app.use(bodyParser.json());
 //app.use(express.static('public'));
 
 app.use('/api/v1', routes);
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static('../client/build'));
+
+  const path = require('path');
+  app.get('*', function(req, res) {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
+  });
+}
 
 app.listen(port, function(err) {
   console.log('This app is listening on port ' + port);
