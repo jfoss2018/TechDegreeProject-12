@@ -1,5 +1,5 @@
 
-let div = document.querySelector('.container');
+let div = document.querySelector('.map');
 
 let map;
 function initMap() {
@@ -24,6 +24,20 @@ function initMap() {
   });
   let markerCluster = new MarkerClusterer(map, markers, {
     imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'
+  });
+
+  map.addListener('click', function(e) {
+    const latitude = (e.latLng.lat()).toFixed(2);
+    const longitude = (e.latLng.lng()).toFixed(2);
+    console.log(latitude + ', ' + longitude);
+    const url = '/api/v1/users';
+    fetch(url)
+      .then(function(response) {
+        return response.json();
+      })
+      .then(function(resJson) {
+        console.log(resJson);
+      });
   });
 }
 
