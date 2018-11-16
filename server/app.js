@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
-const routes = require('./routes.js');
+const routes = require('./routes/routes.js');
 const bodyParser = require('body-parser');
 const apiKeys = require('../.config.js');
 
@@ -20,6 +20,7 @@ db.once('open', function() {
 
 const port = process.env.PORT || 3001;
 
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 //app.use(express.static('public'));
 

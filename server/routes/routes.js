@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const User = require('./models.js').User;
+const User = require('../database/models.js').User;
 
 router.post('/users', function(req, res, next) {
   console.log(req.body);
