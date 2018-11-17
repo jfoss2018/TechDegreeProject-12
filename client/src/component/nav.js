@@ -8,8 +8,7 @@ class Nav extends Component {
     super(props);
     this.state = {
       userName: '',
-      password: '',
-      redirectTo: null
+      password: ''
     }
     this.handleOnChange = this.handleOnChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -17,14 +16,31 @@ class Nav extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    console.log(this.state);
-    axios.post('/api/v1/users', {
-      username: this.state.userName,
-      password: this.state.password
+    axios({
+      method: 'post',
+      url: '/api/v1/users/login',
+      proxy: {
+        host: '127.0.0.1',
+        port: 3001
+      },
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data: {
+        userName: this.state.userName,
+        password: this.state.password
+      }
     })
-    .then(function(response) {
-
-    })
+    .then(response => {
+      if (response.status === 200) {
+        this.props.updateUser({
+          loggedIn: true,
+          currentUser: response.data.username
+        });
+      }
+    }).catch(function(err) {
+      console.log(err);
+    });
   }
 
   handleOnChange(e) {
@@ -95,7 +111,8 @@ class Nav extends Component {
 };
 
 Nav.proptypes = {
-  loggedIn: PropTypes.bool.isRequired
+  loggedIn: PropTypes.bool.isRequired,
+  updateUser: PropTypes.func
 };
 
 export default Nav;

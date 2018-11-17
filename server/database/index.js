@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const databaseKey = require('../../.config.js').databaseKey;
+//mongoose.Promise = global.Promise;
 
 const mongodbURI = `mongodb://${databaseKey.user}:${databaseKey.password}@ds161183.mlab.com:61183/heroku_ljvqjwlq`;
 

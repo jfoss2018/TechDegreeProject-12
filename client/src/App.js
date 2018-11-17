@@ -10,8 +10,14 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      loggedIn: false
+      loggedIn: false,
+      currentUser: ''
     };
+    this.updateUser = this.updateUser.bind(this);
+  }
+
+  updateUser(stateObject) {
+    this.setState(stateObject);
   }
 
   render() {
@@ -19,7 +25,7 @@ class App extends Component {
       <div className="App">
         <BrowserRouter>
           <div>
-            <Nav loggedIn={this.state.loggedIn} />
+            <Nav loggedIn={this.state.loggedIn} updateUser={this.updateUser} />
             <Switch>
               <Route exact path="/" component={Home} />
               <Route path="/about" component={About} />

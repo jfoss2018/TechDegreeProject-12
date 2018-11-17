@@ -35,6 +35,11 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
+app.use(function(err, req, res, next) {
+  console.log(err.message);
+  res.end();
+});
+
 const port = process.env.PORT || 3001;
 
 app.listen(port, function(err) {

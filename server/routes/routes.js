@@ -4,15 +4,16 @@ const User = require('../database/models.js').User;
 const passport = require('../passport/index.js');
 
 router.post('/users', function(req, res, next) {
-  const { username, password } = req.body;
-  User.findOne({username: username}, function(err, user) {
-    if (err) return next(err);
-    if (user) return next(/*already a user error*/);
-    const user = new User({
-        userName: username,
+  const { userName, password } = req.body;
+
+  User.findOne({userName: userName}, function(err, user) {
+    if (err) return console.log('No!!!!!!!!!!');
+    if (user) return console.log('NO way!');
+    const brandNewUser = new User({
+        userName: userName,
         password: password
     });
-    user.save(function(err, newUser) {
+    brandNewUser.save(function(err, newUser) {
       if (err) return next(err);
       res.status = 201;
       res.json(newUser);
@@ -20,10 +21,20 @@ router.post('/users', function(req, res, next) {
   });
 });
 
+/*
+router.post('/users', function(req, res, next) {
+  res.json({
+    username: req.body.userName,
+    password: req.body.password
+  })
+});
+*/
 router.post('/users/login', passport.authenticate('local'), function(req, res, next) {
-
+  res.status = 200;
+  res.json({username: req.user.userName});
 });
 
+/*
 router.post(
     '/login',
     function (req, res, next) {
@@ -40,7 +51,7 @@ router.post(
         res.send(userInfo);
     }
 )
-
+*/
 
 router.get('/users', function(req, res, next) {
   res.json('yup');

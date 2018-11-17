@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+//mongoose.Promise = Promise;
 
 const Schema = mongoose.Schema;
 
@@ -14,7 +15,7 @@ const UserSchema = new Schema({
   }
 });
 
-UserSchema.methods.checkPassword = function(password) {
+UserSchema.methods.verifyPassword = function(password) {
 	return bcrypt.compareSync(password, this.password);
 }
 
