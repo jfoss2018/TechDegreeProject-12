@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 
 class Nav extends Component {
   constructor(props) {
@@ -17,7 +18,13 @@ class Nav extends Component {
   handleSubmit(e) {
     e.preventDefault();
     console.log(this.state);
-    //
+    axios.post('/api/v1/users', {
+      username: this.state.userName,
+      password: this.state.password
+    })
+    .then(function(response) {
+
+    })
   }
 
   handleOnChange(e) {
