@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const User = require('../database/models.js').User;
 const passport = require('../passport/index.js');
+const mid = require('../middleware/middleware.js');
 
 router.post('/users', function(req, res, next) {
   const { userName, password } = req.body;
@@ -29,11 +30,31 @@ router.post('/users', function(req, res, next) {
   })
 });
 */
+/*
+router.get('/users/:id/profile', mid.authenticationMiddleware, function(req, res, next) {
+  const userID = req.params.id;
+
+});
+*/
 router.post('/users/login', passport.authenticate('local'), function(req, res, next) {
   res.status = 200;
-  res.json({username: req.user.userName});
+  res.json({
+    username: req.user.userName,
+    id: req.user._id
+  });
 });
 
+
+router.post('/users/logout', function(req, res, next) {
+    if (req.user) {
+        req.logout();
+        res.status = 200;
+        res.json({message: 'Logged Out'});
+    } else {
+        res.status = 400;
+        res.json({message: 'No user to logout'});
+    }
+});
 /*
 router.post(
     '/login',
