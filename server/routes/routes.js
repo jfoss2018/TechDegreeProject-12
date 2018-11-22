@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../database/models.js').User;
+const User = require('../database/models/user.js').User;
 const passport = require('../passport/index.js');
 const mid = require('../middleware/middleware.js');
 
@@ -74,7 +74,8 @@ router.post(
 )
 */
 
-router.get('/users', function(req, res, next) {
+router.get('/users/:id/profile', mid, function(req, res, next) {
+  res.status = 200;
   res.json('yup');
 });
 

@@ -8,6 +8,7 @@ import Login from './component/login.js';
 import axios from 'axios';
 import history from './component/history.js';
 import Dashboard from './component/dashboard.js';
+import Profile from './component/profile.js';
 
 class App extends Component {
   constructor() {
@@ -61,7 +62,8 @@ class App extends Component {
             <Switch>
               <Route exact path="/" component={Home} />
               <Route path="/about" component={About} />
-              <Route path="/dashboard" component={Dashboard} />
+              <Route path="/dashboard" render={() => <Dashboard loggedIn={this.state.loggedIn} />} />
+              <Route path="/profile" render={() => <Profile loggedIn={this.state.loggedIn} />} />
               <Route path="/login" render={() => <Login updateUser={this.updateUser} />} />
               <Route component={Error} />
             </Switch>
