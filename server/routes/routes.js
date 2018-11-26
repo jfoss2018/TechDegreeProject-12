@@ -3,6 +3,34 @@ const router = express.Router();
 const User = require('../database/models/user.js').User;
 const passport = require('../passport/index.js');
 const mid = require('../middleware/middleware.js');
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, './uploads/');
+  },
+  filename: function(req, file, cb) {
+    let dateString = new Date().toISOString();
+    let formattedDateString = dateString.replace(/:/g, "-");
+    cb(null, formattedDateString + "-" + file.originalname);
+  }
+});
+
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
+
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 1024 * 1024 * 5
+  },
+  fileFilter: fileFilter
+});
 
 router.post('/users', function(req, res, next) {
   const { userName, password } = req.body;
@@ -20,6 +48,10 @@ router.post('/users', function(req, res, next) {
       res.json(newUser);
     });
   });
+});
+
+router.post('/userpic', upload.single('userImage'), function(req, res, next) {
+  res.status(201).json({imageURL: req.file.path});
 });
 
 /*

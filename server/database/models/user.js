@@ -12,6 +12,9 @@ const UserSchema = new Schema({
   password: {
     type: String,
     required: true
+  },
+  userImageURL: {
+    type: String
   }
 });
 

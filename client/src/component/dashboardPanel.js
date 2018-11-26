@@ -1,18 +1,17 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-const DashboardPanel = () => {
+const DashboardPanel = (props) => {
   return (
     <div className="container-fluid">
       <div className="row">
         <div className="col">
-          //UserName
-          <p>One</p>
+          <h3>{props.stateObj.currentUser}</h3>
         </div>
       </div>
       <div className="row">
         <div className="col">
-          //Profile Pic
-          <p>Two</p>
+          <img src={props.stateObj.userImage} alt="" />
         </div>
       </div>
       <div className="row">
@@ -23,6 +22,10 @@ const DashboardPanel = () => {
       </div>
     </div>
   );
+}
+
+DashboardPanel.proptypes = {
+  stateObj: PropTypes.object
 }
 
 export default DashboardPanel;

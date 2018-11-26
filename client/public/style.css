@@ -16,3 +16,7 @@
 .fixme:hover {
   color: #dadada;
 }
+
+.profile-img {
+  width: 100%;
+}

@@ -8,7 +8,6 @@ import Login from './component/login.js';
 import axios from 'axios';
 import history from './component/history.js';
 import Dashboard from './component/dashboard.js';
-import Profile from './component/profile.js';
 
 class App extends Component {
   constructor() {
@@ -16,7 +15,8 @@ class App extends Component {
     this.state = {
       loggedIn: false,
       currentUser: '',
-      id: ''
+      id: '',
+      userImage: ''
     };
     this.updateUser = this.updateUser.bind(this);
     this.logOut = this.logOut.bind(this);
@@ -44,7 +44,8 @@ class App extends Component {
         this.updateUser({
           loggedIn: false,
           currentUser: '',
-          id: ''
+          id: '',
+          userImage: ''
         });
         history.push('/');
       }
@@ -62,8 +63,8 @@ class App extends Component {
             <Switch>
               <Route exact path="/" component={Home} />
               <Route path="/about" component={About} />
-              <Route path="/dashboard" render={() => <Dashboard loggedIn={this.state.loggedIn} />} />
-              <Route path="/profile" render={() => <Profile loggedIn={this.state.loggedIn} />} />
+              <Route path="/dashboard" render={() => <Dashboard load={'Map'} stateObj={this.state} />} />
+              <Route path="/profile" render={() => <Dashboard load={'Profile'} stateObj={this.state} />} />
               <Route path="/login" render={() => <Login updateUser={this.updateUser} />} />
               <Route component={Error} />
             </Switch>

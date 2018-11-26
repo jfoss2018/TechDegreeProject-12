@@ -50,7 +50,8 @@ class Login extends Component {
         this.props.updateUser({
           loggedIn: true,
           currentUser: response.data.username,
-          id: response.data.id
+          id: response.data.id,
+          userImage: response.data.userImageURL || 'uploads/default.png'
         });
         history.push('/dashboard');
       }
@@ -85,7 +86,8 @@ class Login extends Component {
         this.props.updateUser({
           loggedIn: false,
           currentUser: '',
-          id: ''
+          id: '',
+          userImage: ''
         });
       }
     }).catch(function(err) {

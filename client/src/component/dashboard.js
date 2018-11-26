@@ -3,17 +3,25 @@ import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import DashboardPanel from './dashboardPanel.js';
 import Map from './map.js';
+import Profile from './profile.js';
 
 const Dashboard = (props) => {
-  if (props.loggedIn) {
+  let loadComponent;
+  if (props.load === 'Map') {
+    loadComponent = <Map />;
+  } else if (props.load === 'Profile') {
+    loadComponent = <Profile stateObj={props.stateObj} />;
+  }
+
+  if (props.stateObj.loggedIn) {
     return (
       <div className="container-fluid">
         <div className="row">
-          <div className="col-3">
-            <DashboardPanel />
+          <div className="col-3 bg-dark text-light">
+            <DashboardPanel stateObj={props.stateObj} />
           </div>
           <div className="col-9">
-            <Map />
+            {loadComponent}
           </div>
         </div>
       </div>
@@ -26,7 +34,8 @@ const Dashboard = (props) => {
 };
 
 Dashboard.proptypes = {
-  loggedIn: PropTypes.bool
+  stateObj: PropTypes.object,
+  load: PropTypes.string
 }
 
 export default Dashboard;
