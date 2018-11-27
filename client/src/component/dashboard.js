@@ -8,7 +8,7 @@ import Profile from './profile.js';
 const Dashboard = (props) => {
   let loadComponent;
   if (props.load === 'Map') {
-    loadComponent = <Map />;
+    loadComponent = <Map stateObj={props.stateObj} />;
   } else if (props.load === 'Profile') {
     loadComponent = <Profile stateObj={props.stateObj} />;
   }

@@ -62,4 +62,8 @@ typings/
 
 .config.js
 
-uploads
+# exclude everything
+uploads/*
+
+# exception to the rule
+!uploads/default.png

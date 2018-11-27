@@ -42,7 +42,7 @@ class Profile extends Component {
     });
   }
 
-  render() {
+  render(props) {
     return (
       <div className="container-fluid">
         <div className="row">
@@ -54,12 +54,24 @@ class Profile extends Component {
           <div className="row">
             <div className="col-7">
               <div className="form-group">
-                <label forhtml="formGroupExampleInput">Example label</label>
-                <input type="text" className="form-control" id="formGroupExampleInput" placeholder="Example input" />
+                <label forhtml="userName">Username</label>
+                <input type="text" className="form-control" id="userName" placeholder={this.props.stateObj.currentUser} />
               </div>
               <div className="form-group">
-                <label forhtml="formGroupExampleInput2">Another label</label>
-                <input type="text" className="form-control" id="formGroupExampleInput2" placeholder="Another input" />
+                <label forhtml="email">Another label</label>
+                <input type="email" className="form-control" id="email" placeholder={this.props.stateObj.userEmail} />
+              </div>
+              <div className="form-group">
+                <label forhtml="lat">Another label</label>
+                <input type="number" className="form-control" id="lat" placeholder={this.props.stateObj.userLat} />
+              </div>
+              <div className="form-group">
+                <label forhtml="lng">Another label</label>
+                <input type="number" className="form-control" id="lng" placeholder={this.props.stateObj.userLng} />
+              </div>
+              <div className="form-group">
+                <label forhtml="zoom">Another label</label>
+                <input type="number" className="form-control" id="zoom" placeholder={this.props.stateObj.userZoom} />
               </div>
             </div>
             <div className="col-5">

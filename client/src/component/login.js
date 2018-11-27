@@ -51,7 +51,11 @@ class Login extends Component {
           loggedIn: true,
           currentUser: response.data.username,
           id: response.data.id,
-          userImage: response.data.userImageURL || 'uploads/default.png'
+          userImage: response.data.userImageURL || 'uploads/default.png',
+          userEmail: response.data.userEmail || 'james@yahoo.com',
+          userLat: response.data.userCoodinatesLat || 40.75,
+          userLng: response.data.userCoodinatesLng || -74.02,
+          userZoom: response.data.userZoom || 12
         });
         history.push('/dashboard');
       }
@@ -87,7 +91,11 @@ class Login extends Component {
           loggedIn: false,
           currentUser: '',
           id: '',
-          userImage: ''
+          userImage: '',
+          userEmail: '',
+          userLat: null,
+          userLng: null,
+          userZoom: null
         });
       }
     }).catch(function(err) {

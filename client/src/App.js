@@ -16,7 +16,11 @@ class App extends Component {
       loggedIn: false,
       currentUser: '',
       id: '',
-      userImage: ''
+      userImage: '',
+      userEmail: '',
+      userLat: null,
+      userLng: null,
+      userZoom: null
     };
     this.updateUser = this.updateUser.bind(this);
     this.logOut = this.logOut.bind(this);

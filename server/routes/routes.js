@@ -40,7 +40,8 @@ router.post('/users', function(req, res, next) {
     if (user) return console.log('NO way!');
     const brandNewUser = new User({
         userName: userName,
-        password: password
+        password: password,
+        userImageURL: 'uploads/default.png'
     });
     brandNewUser.save(function(err, newUser) {
       if (err) return next(err);
@@ -72,7 +73,12 @@ router.post('/users/login', passport.authenticate('local'), function(req, res, n
   res.status = 200;
   res.json({
     username: req.user.userName,
-    id: req.user._id
+    id: req.user._id,
+    userImageURL: req.user.userImageURL,
+    userCoordinatesLat: req.user.userCoordinates.lat,
+    userCoordinatesLng: req.user.userCoordinates.lng,
+    userZoom: req.user.userZoom,
+    userEmail: req.user.email
   });
 });
 

@@ -13,8 +13,18 @@ const UserSchema = new Schema({
     type: String,
     required: true
   },
+  email: {
+    type: String
+  },
   userImageURL: {
     type: String
+  },
+  userCoordinates: {
+    lat: Number,
+    lng: Number
+  },
+  userZoom: {
+    type: Number
   }
 });
 
