@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import apiKeys from '../.config.js';
+import { apiKeys } from '../.config.js';
 
 class Map extends Component {
   constructor(props) {
@@ -20,7 +20,7 @@ class Map extends Component {
   }
 
   renderMap = () => {
-    loadScript(`https://maps.googleapis.com/maps/api/js?key=${apiKeys.google}&callback=initMap`);
+    loadScript(`https://maps.googleapis.com/maps/api/js?key=   Nope   ${apiKeys.google}&callback=initMap`);
     window.initMap = this.initMap;
   }
 

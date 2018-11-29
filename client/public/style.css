@@ -20,3 +20,8 @@
 .profile-img {
   width: 100%;
 }
+/*
+.form-control:valid~.invalid-feedback {
+  display: none;
+}
+*/

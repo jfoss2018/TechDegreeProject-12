@@ -20,10 +20,18 @@ class App extends Component {
       userEmail: '',
       userLat: null,
       userLng: null,
-      userZoom: null
+      userZoom: null,
+      resError: null,
+      isError: false
     };
     this.updateUser = this.updateUser.bind(this);
     this.logOut = this.logOut.bind(this);
+  }
+
+  componentDidCatch(error, info) {
+    // Display fallback UI
+    this.setState({ resError: error.response.data.message });
+    // You can also log the error to an error reporting service
   }
 
   updateUser(stateObject) {
@@ -59,17 +67,24 @@ class App extends Component {
   }
 
   render() {
+    let errComponent;
+    if (this.state.resError) {
+      errComponent = <Error errorMessage={this.state.resError} />
+    } else {
+      errComponent = null
+    }
     return (
       <div className="App">
         <Router history={history}>
           <div>
             <Nav loggedIn={this.state.loggedIn} logOut={this.logOut} currentUser={this.state.currentUser} />
+            {errComponent}
             <Switch>
               <Route exact path="/" component={Home} />
               <Route path="/about" component={About} />
               <Route path="/dashboard" render={() => <Dashboard load={'Map'} stateObj={this.state} />} />
               <Route path="/profile" render={() => <Dashboard load={'Profile'} stateObj={this.state} />} />
-              <Route path="/login" render={() => <Login updateUser={this.updateUser} />} />
+              <Route path="/login" render={() => <Login isError={this.state.isError} updateUser={this.updateUser} />} />
               <Route component={Error} />
             </Switch>
           </div>

@@ -4,6 +4,7 @@ const User = require('../database/models/user.js').User;
 const passport = require('../passport/index.js');
 const mid = require('../middleware/middleware.js');
 const multer = require('multer');
+const newError = require('./errors.js');
 
 const storage = multer.diskStorage({
   destination: function(req, file, cb) {
@@ -33,20 +34,20 @@ const upload = multer({
 });
 
 router.post('/users', function(req, res, next) {
-  const { userName, password } = req.body;
+  const { userName, password, email } = req.body;
 
   User.findOne({userName: userName}, function(err, user) {
-    if (err) return console.log('No!!!!!!!!!!');
-    if (user) return console.log('NO way!');
+    if (err) return next(newError.serverError());
+    if (user) return next(newError.registrationError());
     const brandNewUser = new User({
         userName: userName,
         password: password,
+        email: email,
         userImageURL: 'uploads/default.png'
     });
     brandNewUser.save(function(err, newUser) {
-      if (err) return next(err);
-      res.status = 201;
-      res.json(newUser);
+      if (err) return next(newError.serverError());
+      res.status(201).json(newUser);
     });
   });
 });
