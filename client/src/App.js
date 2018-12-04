@@ -8,6 +8,7 @@ import Login from './component/login.js';
 import axios from 'axios';
 import history from './component/history.js';
 import Dashboard from './component/dashboard.js';
+import Footer from './component/footer.js';
 
 class App extends Component {
   constructor() {
@@ -21,17 +22,12 @@ class App extends Component {
       userLat: null,
       userLng: null,
       userZoom: null,
-      resError: null,
-      isError: false
+      resMsg: null,
+      resSuccess: null
     };
+    this.handleNavToggle = this.handleNavToggle.bind(this);
     this.updateUser = this.updateUser.bind(this);
     this.logOut = this.logOut.bind(this);
-  }
-
-  componentDidCatch(error, info) {
-    // Display fallback UI
-    this.setState({ resError: error.response.data.message });
-    // You can also log the error to an error reporting service
   }
 
   updateUser(stateObject) {
@@ -66,10 +62,17 @@ class App extends Component {
     });
   }
 
+  handleNavToggle() {
+    const btn = document.getElementById('btn-collapse');
+    if (btn.getAttribute('aria-expanded') === 'true') {
+      btn.click();
+    }
+  }
+
   render() {
     let errComponent;
-    if (this.state.resError) {
-      errComponent = <Error errorMessage={this.state.resError} />
+    if (this.state.resMsg) {
+      errComponent = <Error errorMessage={this.state.resMsg} msgColor={this.state.resSuccess} />
     } else {
       errComponent = null
     }
@@ -77,16 +80,17 @@ class App extends Component {
       <div className="App">
         <Router history={history}>
           <div>
-            <Nav loggedIn={this.state.loggedIn} logOut={this.logOut} currentUser={this.state.currentUser} />
+            <Nav loggedIn={this.state.loggedIn} logOut={this.logOut} toggle={this.handleNavToggle} currentUser={this.state.currentUser} />
             {errComponent}
             <Switch>
               <Route exact path="/" component={Home} />
               <Route path="/about" component={About} />
               <Route path="/dashboard" render={() => <Dashboard load={'Map'} stateObj={this.state} />} />
               <Route path="/profile" render={() => <Dashboard load={'Profile'} stateObj={this.state} />} />
-              <Route path="/login" render={() => <Login isError={this.state.isError} updateUser={this.updateUser} />} />
+              <Route path="/login" render={() => <Login updateUser={this.updateUser} />} />
               <Route component={Error} />
             </Switch>
+            <Footer />
           </div>
         </Router>
       </div>

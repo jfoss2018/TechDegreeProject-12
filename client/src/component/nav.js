@@ -26,17 +26,17 @@ class Nav extends Component {
 
     return (
       <div>
-        <nav className="navbar navbar-expand-md navbar-dark bg-primary static-top">
+        <nav className="navbar navbar-expand-sm navbar-dark bg-primary static-top">
           <div className="container">
-            <span className="navbar-brand align-middle text-light font-italic"><h4>Point & Click Weather App</h4></span>
-            <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <span className="span-1 navbar-brand align-middle text-light font-italic"><h4>Point & Click Weather App</h4></span>
+            <button className="navbar-toggler" type="button" id="btn-collapse" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
               <span className="navbar-toggler-icon"></span>
             </button>
-            <div className="collapse navbar-collapse" id="navbarResponsive">
+            <div className="collapse navbar-collapse text-right" id="navbarResponsive">
               {currentUser ? (
-                <NavItemsLoggedIn currentUser={this.props.currentUser} logOut={this.props.logOut} />
+                <NavItemsLoggedIn toggle={this.props.toggle} currentUser={this.props.currentUser} logOut={this.props.logOut} />
               ) : (
-                <NavItems />
+                <NavItems toggle={this.props.toggle} />
               )}
             </div>
           </div>
@@ -49,7 +49,8 @@ class Nav extends Component {
 Nav.proptypes = {
   loggedIn: PropTypes.bool.isRequired,
   logOut: PropTypes.func,
-  currentUser: PropTypes.string
+  currentUser: PropTypes.string,
+  toggle: PropTypes.func
 };
 
 export default Nav;

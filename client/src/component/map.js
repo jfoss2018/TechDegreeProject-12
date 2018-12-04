@@ -20,7 +20,7 @@ class Map extends Component {
   }
 
   renderMap = () => {
-    loadScript(`https://maps.googleapis.com/maps/api/js?key=   Nope   ${apiKeys.google}&callback=initMap`);
+    loadScript(`https://maps.googleapis.com/maps/api/js?key=  nope   ${apiKeys.google}&callback=initMap`);
     window.initMap = this.initMap;
   }
 
@@ -41,8 +41,17 @@ class Map extends Component {
 
   render() {
     return(
-      <main>
-        <div id="map" className="map">
+      <main className="border border-dark rounded my-3 show-shadow">
+        <div className="container-fluid">
+          <div className="row">
+            <div className="col-12 text-white bg-secondary">
+              <h3>Map</h3>
+            </div>
+            <div className="col-12 px-0">
+              <div id="map" className="map">
+              </div>
+            </div>
+          </div>
         </div>
       </main>
     );

@@ -9,7 +9,7 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const passport = require('./passport/index.js');
 
-/*app.use(function(req, res, next) {
+app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header(
     "Access-Control-Allow-Headers",
@@ -20,7 +20,7 @@ const passport = require('./passport/index.js');
     return res.status(200).json({});
   }
   next();
-});*/
+});
 
 app.use(session({
   secret: secret,
