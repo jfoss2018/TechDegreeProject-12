@@ -79,14 +79,14 @@ class App extends Component {
     return (
       <div className="App">
         <Router history={history}>
-          <div>
+          <div className="display">
             <Nav loggedIn={this.state.loggedIn} logOut={this.logOut} toggle={this.handleNavToggle} currentUser={this.state.currentUser} />
             {errComponent}
             <Switch>
               <Route exact path="/" component={Home} />
               <Route path="/about" component={About} />
               <Route path="/dashboard" render={() => <Dashboard load={'Map'} stateObj={this.state} />} />
-              <Route path="/profile" render={() => <Dashboard load={'Profile'} stateObj={this.state} />} />
+              <Route path="/profile" render={() => <Dashboard updateUser={this.updateUser} load={'Profile'} stateObj={this.state} />} />
               <Route path="/login" render={() => <Login updateUser={this.updateUser} />} />
               <Route component={Error} />
             </Switch>

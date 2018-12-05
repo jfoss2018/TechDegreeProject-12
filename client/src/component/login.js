@@ -70,8 +70,8 @@ class Login extends Component {
           id: response.data.id,
           userImage: response.data.userImageURL || 'uploads/default.png',
           userEmail: response.data.userEmail,
-          userLat: response.data.userCoodinatesLat || 40.75,
-          userLng: response.data.userCoodinatesLng || -74.02,
+          userLat: response.data.userCoordinatesLat || 40.75,
+          userLng: response.data.userCoordinatesLng || -74.02,
           userZoom: response.data.userZoom || 12
         });
         history.push('/dashboard');
@@ -79,7 +79,7 @@ class Login extends Component {
     }).catch((error) => {
       this.props.updateUser({
         resMsg: error.response.data.message,
-        resSuccess: false
+        resSuccess: 'Red'
       });
       this.setState({
         showMsg: true
@@ -120,7 +120,7 @@ class Login extends Component {
           userLng: null,
           userZoom: null,
           resMsg: 'Great! You have successfully registered. Login to get started!',
-          resSuccess: true
+          resSuccess: 'Green'
         });
         this.setState({
           showMsg: true
@@ -130,7 +130,7 @@ class Login extends Component {
     .catch((error) => {
       this.props.updateUser({
         resMsg: error.response.data.message,
-        resSuccess: false
+        resSuccess: 'Red'
       });
       this.setState({
         showMsg: true
@@ -158,7 +158,7 @@ class Login extends Component {
   render() {
     return (
       <div className="container-fluid">
-        <div className="row justify-content-around bg-secondary">
+        <div className="row justify-content-around bg-secondary h-100 set-row d-flex align-items-stretch">
           <div className="col-12 col-md-9 border-left border-right border-dark bg-white">
             <div className="row justify-content-around">
               <div className="col-12 col-sm-5 order-sm-2">

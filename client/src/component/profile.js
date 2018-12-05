@@ -19,7 +19,8 @@ class Profile extends Component {
       formPassword: '',
       fileButton: props.stateObj.userImage,
       editButtonText: 'Edit',
-      notEditting: true
+      notEditting: true,
+      showMsg: false
     }
 
     this.updateSubmit = this.updateSubmit.bind(this);
@@ -32,6 +33,24 @@ class Profile extends Component {
     this.profileForm = React.createRef();
   }
 
+  componentDidUpdate(prevPops, prevState, snapshot) {
+    if (this.state.showMsg === true && prevState.showMsg === true) {
+      this.props.updateUser({
+        resMsg: null,
+        resSuccess: null
+      });
+      this.setState({
+        showMsg: false
+      });
+    }
+  }
+
+  componentWillUnmount() {
+    this.props.updateUser({
+      resMsg: null,
+      resSuccess: null
+    });
+  }
 
   editHandler = (e) => {
     if (e.target.innerHTML === 'Edit') {
@@ -41,9 +60,12 @@ class Profile extends Component {
         editButtonText: 'Save'
       });
     } else if (e.target.innerHTML === 'Save') {
-
+      this.setState({
+        notEditting: true,
+        editButtonText: 'Edit'
+      });
+      this.submitHandler(e);
     }
-
   }
 
   handleOnChange(e) {
@@ -59,10 +81,10 @@ class Profile extends Component {
     });
   }
 
-  updateSubmit() {
-/*    axios({
-      method: 'post',
-      url: '/api/v1/users/login',
+  updateSubmit = () => {
+    axios({
+      method: 'put',
+      url: '/api/v1/users/' + this.props.stateObj.id,
       proxy: {
         host: '127.0.0.1',
         port: 3001
@@ -71,41 +93,57 @@ class Profile extends Component {
         'Content-Type': 'application/json'
       },
       data: {
-        userName: this.state.userNameLogin,
-        password: this.state.passwordLogin
+        userName: this.state.userName,
+        originalPassword: this.state.originalPassword,
+        newPassword: this.state.formPassword,
+        email: this.state.email,
+        lat: this.state.lat,
+        lng: this.state.lng,
+        zoom: this.state.zoom,
+        imageURL: this.state.fileButton
       }
     })
     .then(response => {
       if (response.status === 200) {
-        this.loginForm[0].value = '';
-        this.loginForm[1].value = '';
+        console.log('Made it back');
+        console.log(response.data);
+        console.log(response.data.user);
+        /*this.loginForm[0].value = '';
+        this.loginForm[1].value = '';*/
         this.props.updateUser({
           loggedIn: true,
-          currentUser: response.data.username,
-          id: response.data.id,
-          userImage: response.data.userImageURL || 'uploads/default.png',
-          userEmail: response.data.userEmail,
-          userLat: response.data.userCoodinatesLat || 40.75,
-          userLng: response.data.userCoodinatesLng || -74.02,
-          userZoom: response.data.userZoom || 12
+          currentUser: response.data.user.userName,
+          id: response.data.user._id,
+          userImage: response.data.user.userImageURL,
+          userEmail: response.data.user.email,
+          userLat: response.data.user.userCoordinates.lat || 40.75,
+          userLng: response.data.user.userCoordinates.lng || -74.02,
+          userZoom: response.data.user.userZoom || 12,
+          resMsg: response.data.message,
+          resSuccess: response.data.success
+        });
+        this.setState({
+          showMsg: true
         });
       }
     }).catch((error) => {
-      this.props.updateUser({
+      console.log(error);
+      console.log(error.response);
+      /*this.props.updateUser({
         resMsg: error.response.data.message,
-        resSuccess: false
+        resSuccess: 'Red'
       });
       this.setState({
         showMsg: true
-      });
-    });*/
+      });*/
+    });
   }
 
   submitHandler = (e) => {
     e.preventDefault();
     if (e.target.name === 'modalForm') {
       if (validate(this.modalForm)) {
-        this.profileForm[5].value = this.modalForm[2].value;
+        this.profileForm[6].value = this.modalForm[2].value;
         this.setState({
           formPassword: this.modalForm[2].value
         });
@@ -114,21 +152,7 @@ class Profile extends Component {
       }
     } else {
       if (validate(this.profileForm)) {
-        console.log('valid');
-        const updateObject = {};
-        if (this.state.userName.length > 0) {
-          updateObject.userName = this.state.userName;
-        }
-        if (this.state.formPassword.length > 0) {
-          updateObject.password = this.state.formPassword;
-        }
-        updateObject.lat = this.state.lat;
-        updateObject.lng = this.state.lng;
-        updateObject.zoom = this.state.zoom;
-        if (this.state.email.length > 0) {
-          updateObject.email = this.state.email;
-        }
-        console.log(updateObject);
+        this.updateSubmit();
       } else {
         console.log('invalid');
       }
@@ -195,21 +219,21 @@ class Profile extends Component {
                   <div className="col-12 col-sm-4 px-0 pr-sm-1">
                     <div className="form-group">
                       <label forhtml="lat">Latitude</label>
-                      <input type="number" min="-90" max="90" className="form-control" disabled={this.state.notEditting} onChange={this.handleOnChange} name="lat" id="lat" placeholder={this.props.stateObj.userLat} />
+                      <input type="number" step="0.01" min="-90" max="90" className="form-control" disabled={this.state.notEditting} onChange={this.handleOnChange} name="lat" id="lat" placeholder={this.props.stateObj.userLat} />
                       <span className="invalid-feedback"></span>
                     </div>
                   </div>
                   <div className="col-12 col-sm-4 px-0 px-sm-1">
                     <div className="form-group">
                       <label forhtml="lng">Longitude</label>
-                      <input type="number" className="form-control" min="-180" max="180" disabled={this.state.notEditting} onChange={this.handleOnChange} name="lng" placeholder={this.props.stateObj.userLng} />
+                      <input type="number" step="0.01" className="form-control" min="-180" max="180" disabled={this.state.notEditting} onChange={this.handleOnChange} name="lng" placeholder={this.props.stateObj.userLng} />
                       <span className="invalid-feedback"></span>
                     </div>
                   </div>
                   <div className="col-12 col-sm-4 px-0 pl-sm-1">
                     <div className="form-group">
                       <label forhtml="zoom">Zoom</label>
-                      <input type="number" className="form-control" min="3" max="16" disabled={this.state.notEditting} onChange={this.handleOnChange} name="zoom" id="zoom" placeholder={this.props.stateObj.userZoom} />
+                      <input type="number" step="0.01" className="form-control" min="3" max="16" disabled={this.state.notEditting} onChange={this.handleOnChange} name="zoom" id="zoom" placeholder={this.props.stateObj.userZoom} />
                       <span className="invalid-feedback"></span>
                     </div>
                   </div>
@@ -287,7 +311,8 @@ class Profile extends Component {
 }
 
 Profile.proptypes = {
-  stateObj: PropTypes.object
+  stateObj: PropTypes.object,
+  updateUser: PropTypes.func
 }
 
 export default Profile;

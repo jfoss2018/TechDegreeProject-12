@@ -11,14 +11,14 @@ const Dashboard = (props) => {
     if (props.load === 'Map') {
       loadComponent = <Map stateObj={props.stateObj} />;
     } else if (props.load === 'Profile') {
-      loadComponent = <Profile stateObj={props.stateObj} />;
+      loadComponent = <Profile updateUser={props.updateUser} stateObj={props.stateObj} />;
     }
 
     if (props.stateObj.loggedIn) {
       return (
         <div className="container-fluid">
-          <div className="row h-100 d-flex align-items-stretch">
-            <div className="col-12 col-sm-3 bg-dark text-light">
+          <div className="row h-100 set-row d-flex align-items-stretch">
+            <div className="col-12 col-sm-3 bg-dark text-white">
               <DashboardPanel stateObj={props.stateObj} />
             </div>
             <div className="col-12 col-sm-9">
@@ -36,7 +36,8 @@ const Dashboard = (props) => {
 
 Dashboard.proptypes = {
   stateObj: PropTypes.object,
-  load: PropTypes.string
+  load: PropTypes.string,
+  updateUser: PropTypes.func
 }
 
 export default Dashboard;
