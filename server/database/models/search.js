@@ -12,18 +12,26 @@ const SearchSchema = new Schema({
     type: Date,
     default: Date.now
   },
-  city: {
-    type: String,
-    required: true,
-  },
+  city: String,
   coordinates: {
-    {
-      lat: Number
-    },
-    {
-      lng: Number
-    }
-  }
+    lat: Number,
+    lng: Number
+  },
+  weather:{
+    main: String,
+    description: String,
+    icon: String
+  },
+  temperature: {
+    current: Number,
+    min: Number,
+    max: Number
+  },
+  wind: {
+    speed: Number,
+    dir: String
+  },
+  gifURL: String
 });
 
 

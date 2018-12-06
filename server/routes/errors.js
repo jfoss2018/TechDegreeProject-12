@@ -19,4 +19,10 @@ newError.loginError = function() {
   return err;
 }
 
+newError.picError = function() {
+  const err = new Error('Only .jpg & .png files can be uploaded.');
+  err.status = '400';
+  return err;
+}
+
 module.exports = newError;

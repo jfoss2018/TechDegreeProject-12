@@ -1,10 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../database/models/user.js').User;
+const Search = require('../database/models/search.js').Search;
 const passport = require('../passport/index.js');
 const mid = require('../middleware/middleware.js');
 const multer = require('multer');
 const newError = require('./errors.js');
+const apiKeys = require('../../.config.js').apiKeys;
+const axios = require('axios');
 
 const storage = multer.diskStorage({
   destination: function(req, file, cb) {
@@ -21,7 +24,7 @@ const fileFilter = (req, file, cb) => {
   if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
     cb(null, true);
   } else {
-    cb(null, false);
+    cb(newError.picError(), false);
   }
 };
 
@@ -52,7 +55,7 @@ router.post('/users', function(req, res, next) {
   });
 });
 
-router.post('/userpic', upload.single('userImage'), function(req, res, next) {
+router.post('/userpic', mid, upload.single('userImage'), function(req, res, next) {
   res.status(201).json({imageURL: req.file.path});
 });
 
@@ -99,7 +102,7 @@ function returnUser(req, res, user, updateObj, messageStr, successType) {
   });
 }
 
-router.put('/users/:id',  function(req, res, next) {
+router.put('/users/:id', mid, function(req, res, next) {
   const updateObj = {};
   let messageStr;
   let successType;
@@ -195,9 +198,66 @@ router.post(
 )
 */
 
+router.post('/users/:id/searches', mid, function(req, res, next) {
+  axios({
+    method: 'get',
+    url: `http://api.openweathermap.org/data/2.5/weather?lat=${req.body.lat}&lon=${req.body.lng}&APPID=${apiKeys.openWeather}&units=imperial`
+  })
+  .then(response => {
+    axios({
+      method: 'get',
+      url: `http://api.giphy.com/v1/gifs/search?q=${response.data.weather[0].description}&api_key=${apiKeys.giphy}&limit=1`
+    })
+    .then(gifResponse => {
+      const windDeg = response.data.wind.deg;
+      let windDir;
+      if (windDeg >= 0 && windDeg <= 22.5) {windDir = 'N';}
+      if (windDeg > 22.5 && windDeg <= 67.5) {windDir = 'NE';}
+      if (windDeg > 67.5 && windDeg <= 112.5) {windDir = 'E';}
+      if (windDeg > 112.5 && windDeg <= 157.5) {windDir = 'SE';}
+      if (windDeg > 157.5 && windDeg <= 202.5) {windDir = 'S';}
+      if (windDeg > 202.5 && windDeg <= 247.5) {windDir = 'SW';}
+      if (windDeg > 247.5 && windDeg <= 292.5) {windDir = 'W';}
+      if (windDeg > 292.5 && windDeg <= 337.5) {windDir = 'NW';}
+      if (windDeg > 337.5 && windDeg <= 360) {windDir = 'N';}
+      const newSearch = new Search({
+        user: req.params.id,
+        city: response.data.name,
+        coordinates: {
+          lat: response.data.coord.lat,
+          lng: response.data.coord.lon
+        },
+        weather: {
+          main: response.data.weather[0].main,
+          description: response.data.weather[0].description,
+          icon: response.data.weather[0].icon
+        },
+        temperature: {
+          current: response.data.main.temp,
+          min: response.data.main.temp_min,
+          max: response.data.main.temp_max
+        },
+        wind: {
+          speed: response.data.wind.speed,
+          dir: windDir
+        },
+        gifURL: gifResponse.data.data[0].images.fixed_width.url
+      })
+      newSearch.save(function(err, search) {
+        res.status('200').json(search);
+      });
+    })
+    .catch(err => {
+      next(newError.serverError());
+    });
+  }).catch((err) => {
+    next(newError.serverError());
+  });
+});
+/*
 router.get('/users/:id/profile', mid, function(req, res, next) {
   res.status = 200;
   res.json('yup');
 });
-
+*/
 module.exports = router

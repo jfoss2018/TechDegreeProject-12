@@ -105,11 +105,17 @@ class Profile extends Component {
     })
     .then(response => {
       if (response.status === 200) {
-        console.log('Made it back');
-        console.log(response.data);
-        console.log(response.data.user);
-        /*this.loginForm[0].value = '';
-        this.loginForm[1].value = '';*/
+        this.profileForm[1].value = '';
+        this.profileForm[2].value = '';
+        this.profileForm[3].value = '';
+        this.profileForm[4].value = '';
+        this.profileForm[5].value = '';
+        this.profileForm[6].value = '';
+        this.profileForm[8].value = '';
+        this.modalForm[0].value = '';
+        this.modalForm[1].value = '';
+        this.modalForm[2].value = '';
+        document.querySelector('.hidden-div').hidden = true;
         this.props.updateUser({
           loggedIn: true,
           currentUser: response.data.user.userName,
@@ -126,16 +132,14 @@ class Profile extends Component {
           showMsg: true
         });
       }
-    }).catch((error) => {
-      console.log(error);
-      console.log(error.response);
-      /*this.props.updateUser({
-        resMsg: error.response.data.message,
+    }).catch((err) => {
+      this.props.updateUser({
+        resMsg: err.response.data.message,
         resSuccess: 'Red'
       });
       this.setState({
         showMsg: true
-      });*/
+      });
     });
   }
 
@@ -177,13 +181,19 @@ class Profile extends Component {
     })
     .then(response => {
       if (response.status === 201) {
-        console.log(response.data.imageURL);
         this.setState({
           fileButton: response.data.imageURL
         });
       }
-    }).catch(function(err) {
-      console.log(err);
+    }).catch((err) => {
+      this.profileForm[8].value = '';
+      this.props.updateUser({
+        resMsg: err.response.data.message,
+        resSuccess: 'Red'
+      });
+      this.setState({
+        showMsg: true
+      });
     });
   }
 
