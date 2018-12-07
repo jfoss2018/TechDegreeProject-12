@@ -9,9 +9,34 @@ class Map extends Component {
     this.state = {
       currentLat: null,
       currentLng: null,
-      zoom: null
+      zoom: null,
+      map: null,
+      markers: [],
+      showMsg: false
     }
     this.getWeather = this.getWeather.bind(this);
+    this.onClear = this.onClear.bind(this);
+    this.setMapOnAll = this.setMapOnAll.bind(this);
+    this.clearMarkers = this.clearMarkers.bind(this);
+  }
+
+  componentDidUpdate(prevPops, prevState, snapshot) {
+    if (this.state.showMsg === true && prevState.showMsg === true) {
+      this.props.updateUser({
+        resMsg: null,
+        resSuccess: null
+      });
+      this.setState({
+        showMsg: false
+      });
+    }
+  }
+
+  componentWillUnmount() {
+    this.props.updateUser({
+      resMsg: null,
+      resSuccess: null
+    });
   }
 
   getWeather = (map, infoWindow) => {
@@ -31,7 +56,6 @@ class Map extends Component {
       }
     })
     .then(response => {
-      console.log(response.data);
       const marker = new window.google.maps.Marker({
         position: {
           lat: response.data.coordinates.lat,
@@ -40,10 +64,11 @@ class Map extends Component {
         map: map,
         title: response.data.city
       });
+      this.state.markers.push(marker);
       infoWindow.setContent(`
         <div class="container">
           <div class="row">
-            <div class="col-6">
+            <div class="col-12 col-md-6">
               <div class="row">
                 <div class="col-12">
                   <img src="${response.data.gifURL}" alt="">
@@ -53,12 +78,12 @@ class Map extends Component {
                 </div>
               </div>
             </div>
-            <div class="col-6">
+            <div class="col-12 col-md-6">
               <div class="row">
                 <div class="col-12">
                   <h4>${response.data.city || 'Unavailable'}</h4>
                 </div>
-                <div class="col-12 mt-1">
+                <div class="col-12 mt-2">
                   <p><strong>Current condition:</strong> ${response.data.weather.main} with ${response.data.weather.description}</p>
                 </div>
                 <div class="col-12">
@@ -75,46 +100,39 @@ class Map extends Component {
         infoWindow.open(map, marker);
       });
       infoWindow.open(map, marker);
-      /*if (response.status === 200) {
-        this.profileForm[1].value = '';
-        this.profileForm[2].value = '';
-        this.profileForm[3].value = '';
-        this.profileForm[4].value = '';
-        this.profileForm[5].value = '';
-        this.profileForm[6].value = '';
-        this.profileForm[8].value = '';
-        this.modalForm[0].value = '';
-        this.modalForm[1].value = '';
-        this.modalForm[2].value = '';
-        document.querySelector('.hidden-div').hidden = true;
-        this.props.updateUser({
-          loggedIn: true,
-          currentUser: response.data.user.userName,
-          id: response.data.user._id,
-          userImage: response.data.user.userImageURL,
-          userEmail: response.data.user.email,
-          userLat: response.data.user.userCoordinates.lat || 40.75,
-          userLng: response.data.user.userCoordinates.lng || -74.02,
-          userZoom: response.data.user.userZoom || 12,
-          resMsg: response.data.message,
-          resSuccess: response.data.success
-        });
-        this.setState({
-          showMsg: true
-        });
-      }*/
+      this.props.updateUser({
+        city: response.data.city,
+        weather: response.data.weather.main,
+        temperature: response.data.temperature.current
+      });
     }).catch((err) => {
       console.log(err.response, 'browser');
-      /*this.props.updateUser({
+      this.props.updateUser({
         resMsg: err.response.data.message,
-        resSuccess: 'Red'
+        resSuccess: err.response.data.success
       });
       this.setState({
         showMsg: true
-      });*/
+      });
     });
   }
 
+  setMapOnAll = (map) => {
+    for (let i = 0; i < this.state.markers.length; i += 1) {
+      this.state.markers[i].setMap(map);
+    }
+  }
+
+  clearMarkers = () => {
+    this.setMapOnAll(null);
+  }
+
+  onClear = () => {
+    this.clearMarkers();
+    this.setState({
+      markers: []
+    });
+  }
 
   componentDidMount() {
     this.renderMap();
@@ -131,12 +149,15 @@ class Map extends Component {
       zoom: this.props.stateObj.userZoom
     });
 
+    this.setState({
+      map: map
+    });
+
     const infoWindow = new window.google.maps.InfoWindow();
 
     map.addListener('click', (e) => {
       const latitude = (e.latLng.lat()).toFixed(2);
       const longitude = (e.latLng.lng()).toFixed(2);
-      console.log(latitude + ', ' + longitude);
       this.setState({
         currentLat: latitude,
         currentLng: longitude
@@ -151,13 +172,26 @@ class Map extends Component {
 
 
 
-  render() {
+  render(props) {
     return(
       <main className="border border-dark rounded my-3 show-shadow">
         <div className="container-fluid">
           <div className="row">
             <div className="col-12 text-white bg-secondary">
-              <h3>Map</h3>
+              <div className="row">
+                <div className="col-4">
+                  <h3 className="mt-1">Map</h3>
+                </div>
+                <div className="col-2 text-center align-bottom">
+                  <span className="mt-1">Lat: {this.state.currentLat}</span>
+                </div>
+                <div className="col-2 text-center align-bottom">
+                  <span className="mt-1">Lng: {this.state.currentLng}</span>
+                </div>
+                <div className="col-4">
+                  <button type="button" className="btn btn-light float-right btn-sm mt-2" onClick={this.onClear}>Clear</button>
+                </div>
+              </div>
             </div>
             <div className="col-12 px-0">
               <div id="map" className="map">

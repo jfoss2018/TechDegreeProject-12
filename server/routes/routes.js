@@ -3,7 +3,8 @@ const router = express.Router();
 const User = require('../database/models/user.js').User;
 const Search = require('../database/models/search.js').Search;
 const passport = require('../passport/index.js');
-const mid = require('../middleware/middleware.js');
+const mid = require('../middleware/middleware.js').authenticate;
+const midTime = require('../middleware/middleware.js').timeout;
 const multer = require('multer');
 const newError = require('./errors.js');
 const apiKeys = require('../../.config.js').apiKeys;
@@ -198,7 +199,13 @@ router.post(
 )
 */
 
-router.post('/users/:id/searches', mid, function(req, res, next) {
+router.get('/users/:id/searches', mid, function(req, res, next) {
+  Search.find({user: req.params.id}, null, {sort: {postedOn: -1}}, function(err, searches) {
+      res.status('200').json(searches);
+  });
+});
+
+router.post('/users/:id/searches', mid, midTime, function(req, res, next) {
   axios({
     method: 'get',
     url: `http://api.openweathermap.org/data/2.5/weather?lat=${req.body.lat}&lon=${req.body.lng}&APPID=${apiKeys.openWeather}&units=imperial`

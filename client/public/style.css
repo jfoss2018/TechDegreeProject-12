@@ -1,5 +1,5 @@
 .map {
-  height: 75vh;
+  height: 80vh;
   width: 100%;
 }
 
@@ -56,6 +56,17 @@ html, body {
 
 .display {
   overflow: hidden;
+}
+
+.list-item {
+  list-style-type: none;
+  margin-left: -35px;
+  margin-top: 5px;
+}
+
+.size-large {
+  font-size: 24px;
+  margin-top: -5px;
 }
 
 @media screen and (min-width: 768px) {
