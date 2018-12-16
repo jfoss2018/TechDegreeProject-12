@@ -1,5 +1,6 @@
 import React from 'react';
 
+// About Component gives an overview of this project.
 const About = () => {
   return (
     <div className="container-fluid">

@@ -17,7 +17,13 @@ function pagination(pageNum, searches) {
 }
 
 function noPage(itemCount, pages, pageObj, searches) {
-  for (let i = 0; i < itemCount; i += 1) {
+  let searchLength;
+  if (searches.length < itemCount) {
+    searchLength = searches.length;
+  } else {
+    searchLength = itemCount;
+  }
+  for (let i = 0; i < searchLength; i += 1) {
     pageObj.items.push(searches[i]);
   }
   if (pages > 1) {
@@ -72,8 +78,6 @@ function newPage(itemCount, pages, page, pageObj, searches) {
       pageObj.buttons.push(pages - 2);
       pageObj.buttons.push(pages - 1);
       pageObj.buttons.push(pages);
-    } else {
-      console.log('math is wrong');
     }
     return pageObj;
   } else {

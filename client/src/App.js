@@ -4,6 +4,7 @@ import { Router, Route, Switch } from 'react-router-dom';
 import Home from './component/home.js';
 import About from './component/about.js';
 import Error from './component/error.js';
+import NotFound from './component/notFound.js';
 import Login from './component/login.js';
 import axios from 'axios';
 import history from './component/history.js';
@@ -30,7 +31,8 @@ class App extends Component {
       temperature: '',
       list: [],
       btnList: [],
-      searches: []
+      searches: [],
+      pageNum: 1
     };
     this.handleNavToggle = this.handleNavToggle.bind(this);
     this.updateUser = this.updateUser.bind(this);
@@ -56,12 +58,12 @@ class App extends Component {
       }
     })
     .then(response => {
-      console.log(response.data);
       const returnObj = pageSetUp(response.data, null);
       this.setState({
         list: returnObj.items,
         btnList: returnObj.buttons,
-        searches: returnObj.searches
+        searches: returnObj.searches,
+        pageNum: 1
       });
     })
     .catch(err => {
@@ -75,7 +77,8 @@ class App extends Component {
     this.setState({
       list: newReturnObj.items,
       btnList: newReturnObj.buttons,
-      searches: newReturnObj.searches
+      searches: newReturnObj.searches,
+      pageNum: parseInt(e.target.value)
     });
   }
 
@@ -109,6 +112,7 @@ class App extends Component {
           weather: '',
           temperature: ''
         });
+        this.handleNavToggle();
         history.push('/');
       }
     }).catch(function(err) {
@@ -138,11 +142,11 @@ class App extends Component {
             {errComponent}
             <Switch>
               <Route exact path="/" component={Home} />
-              <Route path="/about" component={About} />
-              <Route path="/dashboard" render={() => <Dashboard paging={this.paging} getSearches={this.getSearches} updateUser={this.updateUser} load={'Map'} stateObj={this.state} />} />
-              <Route path="/profile" render={() => <Dashboard paging={this.paging} getSearches={this.getSearches} updateUser={this.updateUser} load={'Profile'} stateObj={this.state} />} />
-              <Route path="/login" render={() => <Login updateUser={this.updateUser} />} />
-              <Route component={Error} />
+              <Route exact path="/about" component={About} />
+              <Route exact path="/dashboard" render={() => <Dashboard pageNum={this.state.pageNum} paging={this.paging} getSearches={this.getSearches} updateUser={this.updateUser} load={'Map'} stateObj={this.state} />} />
+              <Route exact path="/profile" render={() => <Dashboard pageNum={this.state.pageNum} paging={this.paging} getSearches={this.getSearches} updateUser={this.updateUser} load={'Profile'} stateObj={this.state} />} />
+              <Route exact path="/login" render={() => <Login updateUser={this.updateUser} />} />
+              <Route component={NotFound} />
             </Switch>
             <Footer />
           </div>

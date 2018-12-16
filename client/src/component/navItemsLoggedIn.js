@@ -19,7 +19,7 @@ const NavItemsLoggedIn = (props) => {
           <Link onClick={props.toggle} className="dropdown-item" to="/profile">Profile</Link>
           <Link onClick={props.toggle} className="dropdown-item" to="/dashboard">Dashboard</Link>
           <div className="dropdown-divider"></div>
-          <Link onClick={props.toggle} className="dropdown-item" to="/" onClick={props.logOut}>Log Out</Link>
+          <Link className="dropdown-item" to="/" onClick={props.logOut}>Log Out</Link>
         </div>
       </li>
     </ul>

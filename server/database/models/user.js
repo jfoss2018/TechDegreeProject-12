@@ -1,30 +1,54 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
-//mongoose.Promise = Promise;
 
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
   userName: {
     type: String,
-    required: true
+    minlength: [4, 'Username Invalid. Username must be 4 or more characters.'],
+    maxlength: [16, 'Username Invalid. Username must be 16 or less characters.'],
+    required: [true, 'Username is required.']
   },
   password: {
     type: String,
-    required: true
+    required: [true, 'Password is required.']
   },
   email: {
-    type: String
+    type: String,
+    validate: {
+      validator: function(v) {
+        return /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/.test(v);
+      },
+      message: props => `${props.value} is not a valid email address!`
+    },
+    required: [true, 'Email is required.']
   },
   userImageURL: {
-    type: String
+    type: String,
+    validate: {
+      validator: function(v) {
+        return /[jpg|png|jpeg|JPG|PNG|JPEG]$/.test(v);
+      },
+      message: props => `Image file must be .jpg, .jpeg or .png`
+    }
   },
   userCoordinates: {
-    lat: Number,
-    lng: Number
+    lat: {
+      type: Number,
+      min: [-90, 'Latitude must be greater than -90.'],
+      max: [90, 'Latitude must be less than 90.']
+    },
+    lng: {
+      type: Number,
+      min: [-180, 'Longitude must be greater than -180.'],
+      max: [180, 'Longitude must be less than 180.']
+    }
   },
   userZoom: {
-    type: Number
+    type: Number,
+    min: [3, 'Zoom must be greater than 3.'],
+    max: [16, 'Zoom must be less than 16.']
   }
 });
 

@@ -1,5 +1,6 @@
 import React from 'react';
 
+// The Footer component is fixed to the bottom of the viewport.
 const Footer = () => {
   return (
     <div className="container-fluid set-footer">

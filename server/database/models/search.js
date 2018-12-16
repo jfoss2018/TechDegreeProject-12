@@ -6,11 +6,18 @@ const ObjectId = Schema.Types.ObjectId;
 const SearchSchema = new Schema({
   user: {
     type: ObjectId,
-    ref: 'User'
+    ref: 'User',
+    required: [true, 'User required to perform a search.']
   },
   postedOn: {
     type: Date,
-    default: Date.now
+    default: function() {
+      let newDate = new Date();
+      let offSet = newDate.getTimezoneOffset() * 60000;
+      let localDate = newDate - offSet;
+      return localDate;
+    },
+    required: [true, 'Date required for search.']
   },
   city: String,
   coordinates: {

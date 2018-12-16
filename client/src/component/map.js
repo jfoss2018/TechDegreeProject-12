@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import { apiKeys } from '../.config.js';
 import axios from 'axios';
 
+// The Map component displays the Google Maps map.
 class Map extends Component {
+  // The Map Component keeps up with current search, map, and marker information in its state.
   constructor(props) {
     super(props);
     this.state = {
@@ -20,6 +22,8 @@ class Map extends Component {
     this.clearMarkers = this.clearMarkers.bind(this);
   }
 
+  // componentDidUpdate is used to clear any error message that is displayed when
+  // state changes following a message being displayed.
   componentDidUpdate(prevPops, prevState, snapshot) {
     if (this.state.showMsg === true && prevState.showMsg === true) {
       this.props.updateUser({
@@ -32,6 +36,7 @@ class Map extends Component {
     }
   }
 
+  // Any error messages displayed will be removed when the map component unmounts.
   componentWillUnmount() {
     this.props.updateUser({
       resMsg: null,
@@ -39,6 +44,7 @@ class Map extends Component {
     });
   }
 
+  
   getWeather = (map, infoWindow) => {
     axios({
       method: 'post',
@@ -66,9 +72,9 @@ class Map extends Component {
       });
       this.state.markers.push(marker);
       infoWindow.setContent(`
-        <div class="container">
+        <div class="container-fluid">
           <div class="row">
-            <div class="col-12 col-md-6">
+            <div class="col-12 col-md-6 col-lg-4">
               <div class="row">
                 <div class="col-12">
                   <img src="${response.data.gifURL}" alt="">
@@ -78,10 +84,10 @@ class Map extends Component {
                 </div>
               </div>
             </div>
-            <div class="col-12 col-md-6">
+            <div class="col-12 col-md-6 col-lg-8">
               <div class="row">
                 <div class="col-12">
-                  <h4>${response.data.city || 'Unavailable'}</h4>
+                  <h4>${response.data.city}</h4>
                 </div>
                 <div class="col-12 mt-2">
                   <p><strong>Current condition:</strong> ${response.data.weather.main} with ${response.data.weather.description}</p>
@@ -208,6 +214,7 @@ function loadScript(url) {
   const index = window.document.getElementsByTagName("script")[0];
   const script = window.document.createElement("script");
   script.src = url;
+  script.id = 'google';
   script.async = true;
   script.defer = true;
   index.parentNode.insertBefore(script, index);

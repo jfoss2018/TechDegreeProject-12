@@ -1,5 +1,7 @@
 import React from 'react';
 
+// The home component is the main body of the landing page when visiting this app.
+// It shows a short video that depicts how to use this app.
 const Home = () => {
   return (
     <div className="container-fluid">
