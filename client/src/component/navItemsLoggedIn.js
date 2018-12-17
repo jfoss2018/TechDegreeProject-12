@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
+// The NavItemsLoggedIn component is displayed when there is a current user in App.js state. It
+// contains a button with the user's name and a dropdown for further routing.
 const NavItemsLoggedIn = (props) => {
   return (
     <ul className="navbar-nav ml-auto">
@@ -15,6 +17,7 @@ const NavItemsLoggedIn = (props) => {
         <Link className="nav-link text-light font-weight-bold dropdown-toggle" id="navbarDropdown" to="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           {props.currentUser}
         </Link>
+        {/*Dropdown menu*/}
         <div className="dropdown-menu" aria-labelledby="navbarDropdown">
           <Link onClick={props.toggle} className="dropdown-item" to="/profile">Profile</Link>
           <Link onClick={props.toggle} className="dropdown-item" to="/dashboard">Dashboard</Link>

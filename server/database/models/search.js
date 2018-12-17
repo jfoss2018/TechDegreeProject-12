@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
 
+// The SearchSchema for the database contains information regarding every search
+// and its corresponding user id.
 const SearchSchema = new Schema({
   user: {
     type: ObjectId,

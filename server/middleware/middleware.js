@@ -1,14 +1,21 @@
 const Search = require('../database/models/search.js').Search;
 const newError = require('../routes/errors.js');
 
-
+// authenticate middleware calls isAuthenticated provided by passport, and allows
+// access to the next middleware in the current endpoint.
 module.exports.authenticate = function(req, res, next) {
   if (req.isAuthenticated()) {
     return next();
   }
+  // If the user is not authenticated, they are redirected home.
   res.redirect('/');
 }
 
+// The timeout middleware tests the current search's coordinates against all searches
+// performed within the previous 10 minutes. If the coordinates are within a set distance
+// from previous searches, an error is returned.
+// The reason for this is due to the Open Weather API stating not to perform repetitive
+// searches for a single location more than once every 10 minutes.
 module.exports.timeout = function(req, res, next) {
   let sendRes = false;
   const latHigh = parseFloat(req.body.lat) + .1;

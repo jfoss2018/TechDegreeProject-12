@@ -1,4 +1,5 @@
-
+// newError object is made up of several error functions that create custom errors for
+// use in routes.js
 const newError = {};
 
 newError.registrationError = function() {

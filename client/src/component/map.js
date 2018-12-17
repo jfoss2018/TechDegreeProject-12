@@ -44,11 +44,14 @@ class Map extends Component {
     });
   }
 
-  
+  // The getWeather function is called when the map is clicked on.
   getWeather = (map, infoWindow) => {
+    // This function sends a post request to the /users/:id/searches api endpoint
+    // with the latitude and longitude corresponding to the coordinates from the
+    // location clicked on the map.
     axios({
       method: 'post',
-      url: '/api/v1/users/' + this.props.stateObj.id + '/searches',
+      url: `/api/v1/users/${this.props.stateObj.id}/searches`,
       proxy: {
         host: '127.0.0.1',
         port: 3001
@@ -62,6 +65,7 @@ class Map extends Component {
       }
     })
     .then(response => {
+      // When a response is received, a map marker is created.
       const marker = new window.google.maps.Marker({
         position: {
           lat: response.data.coordinates.lat,
@@ -71,6 +75,7 @@ class Map extends Component {
         title: response.data.city
       });
       this.state.markers.push(marker);
+      // The info window corresponding to the created marker is filled with the following content.
       infoWindow.setContent(`
         <div class="container-fluid">
           <div class="row">
@@ -102,9 +107,12 @@ class Map extends Component {
             </div>
           </div>
         </div>`);
+      // When the marker is clicked, the info window will open.
       marker.addListener('click', function() {
         infoWindow.open(map, marker);
       });
+      // The info window will be opened directly after searching, and current search information will update
+      // the state in App.js.
       infoWindow.open(map, marker);
       this.props.updateUser({
         city: response.data.city,
@@ -112,7 +120,7 @@ class Map extends Component {
         temperature: response.data.temperature.current
       });
     }).catch((err) => {
-      console.log(err.response, 'browser');
+      // If there is an error, the error message will be displayed in the Error component.
       this.props.updateUser({
         resMsg: err.response.data.message,
         resSuccess: err.response.data.success
@@ -123,16 +131,21 @@ class Map extends Component {
     });
   }
 
+  // The setMapOnAll function loops over the markers array and setMap on all markers.
+  // This function is used to clear the markers if desired.
   setMapOnAll = (map) => {
     for (let i = 0; i < this.state.markers.length; i += 1) {
       this.state.markers[i].setMap(map);
     }
   }
 
+  // clearMarkers calls the setMapOnAll function will a null parameter.
   clearMarkers = () => {
     this.setMapOnAll(null);
   }
 
+  // onClear is called when the clear button is clicked on the map component.
+  // It calls the clearMarkers function and resets the markers array to empty.
   onClear = () => {
     this.clearMarkers();
     this.setState({
@@ -140,15 +153,20 @@ class Map extends Component {
     });
   }
 
+  // componentDidMount calls the renderMap function when the component mounts.
   componentDidMount() {
     this.renderMap();
   }
 
+  // The renderMap function loads the required script on index.html for Google Map's Api, and
+  // calls initMap.
   renderMap = () => {
     loadScript(`https://maps.googleapis.com/maps/api/js?key=${apiKeys.google}&callback=initMap`);
     window.initMap = this.initMap;
   }
 
+  // initMap creates a Google Map using the Google Maps API and uses the current User's preferred
+  // center and zoom parameters if they are updated in the User's profile.
   initMap = (props) => {
     var map = new window.google.maps.Map(document.getElementById('map'), {
       center: {lat: this.props.stateObj.userLat, lng: this.props.stateObj.userLng},
@@ -159,8 +177,12 @@ class Map extends Component {
       map: map
     });
 
+    // Only one infoWindow is created, because I felt that only being able to have one open
+    // at a time created a cleaner look.
     const infoWindow = new window.google.maps.InfoWindow();
 
+    // When the map is clicked, the Map component's state is updated and the getWeather function
+    // is called.
     map.addListener('click', (e) => {
       const latitude = (e.latLng.lat()).toFixed(2);
       const longitude = (e.latLng.lng()).toFixed(2);
@@ -170,13 +192,7 @@ class Map extends Component {
       });
       this.getWeather(map, infoWindow);
     });
-
-
-
-
   }
-
-
 
   render(props) {
     return(
@@ -210,6 +226,7 @@ class Map extends Component {
   }
 }
 
+// The loadScript function uses the window object to be able to create a script element on the DOM.
 function loadScript(url) {
   const index = window.document.getElementsByTagName("script")[0];
   const script = window.document.createElement("script");

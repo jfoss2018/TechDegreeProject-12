@@ -2,6 +2,7 @@ const User = require('../database/models/user.js').User;
 const LocalStrategy = require('passport-local').Strategy;
 const newError = require('../routes/errors.js');
 
+// Passport local stategy for user authentication.
 const strategy = new LocalStrategy({
     usernameField: 'userName'
   },

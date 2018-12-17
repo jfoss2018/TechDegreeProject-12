@@ -1,3 +1,6 @@
+// The pageSetUp function returns three arrays. One for all searches, one for the
+// search items that should be displayed, and one with the contents of each button
+// that should be displayed for pagination.
 function pageSetUp(searches, page) {
   let itemCount = 10;
   let pages = Math.ceil(searches.length / itemCount);
@@ -12,10 +15,14 @@ function pageSetUp(searches, page) {
   }
 }
 
+// The pagination function is called when a page button is clicked. It calls the
+// pageSetUp function with the current searches in state with the page number clicked.
 function pagination(pageNum, searches) {
   return pageSetUp(searches, pageNum);
 }
 
+// The noPage function returns the list and btnList arrays for pageSetUp when no page
+// number is supplied.
 function noPage(itemCount, pages, pageObj, searches) {
   let searchLength;
   if (searches.length < itemCount) {
@@ -45,6 +52,8 @@ function noPage(itemCount, pages, pageObj, searches) {
   }
 }
 
+// The newPage function returns the list and btnList arrays for pageSetUp when a page
+// number is supplied.
 function newPage(itemCount, pages, page, pageObj, searches) {
   let loopLength;
   if (page === pages) {

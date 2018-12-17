@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
+// The NavItems component is displayed when there is no current user state in App.js. It contains a 'login' button.
 const NavItems = (props) => {
   return (
     <ul className="navbar-nav ml-auto">

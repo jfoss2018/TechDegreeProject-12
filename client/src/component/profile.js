@@ -4,7 +4,10 @@ import axios from 'axios';
 import FormData from 'form-data';
 import { validate } from '../formValidate.js';
 
+// The Profile component allows the user to edit their profile information.
 class Profile extends Component {
+  // The state for the profile component is primarily used to update the show message
+  // state upon update.
   constructor(props) {
     super(props);
     this.state = {
@@ -33,6 +36,8 @@ class Profile extends Component {
     this.profileForm = React.createRef();
   }
 
+  // componentDidUpdate is used to remove the Error Component when the state
+  // changes following the display of an error message.
   componentDidUpdate(prevPops, prevState, snapshot) {
     if (this.state.showMsg === true && prevState.showMsg === true) {
       this.props.updateUser({
@@ -45,6 +50,7 @@ class Profile extends Component {
     }
   }
 
+  // The error component will be removed when the Profile component is unmounted.
   componentWillUnmount() {
     this.props.updateUser({
       resMsg: null,
@@ -52,6 +58,9 @@ class Profile extends Component {
     });
   }
 
+  // The editHandler function is called when the edit button is clicked. When in 'editting' mode,
+  // the 'edit' button changes to the 'save' button. The 'save' button will submit the profile form
+  // field information.
   editHandler = (e) => {
     if (e.target.innerHTML === 'Edit') {
       e.preventDefault();
@@ -68,12 +77,15 @@ class Profile extends Component {
     }
   }
 
+  // The handleOnChange function sets the Profile state whenever a form feild is changed.
   handleOnChange(e) {
     this.setState({
       [e.target.name]: e.target.value
     });
   }
 
+  // The 'cancel' button resets the 'editting' state which removes the 'cancel' button
+  // and reverts the 'save' button to the 'edit' button.
   cancelHandler = (e) => {
     this.setState({
       notEditting: true,
@@ -81,7 +93,11 @@ class Profile extends Component {
     });
   }
 
+  // The updateSubmit function updates the user's information corresponding to
+  // the editted fields.
   updateSubmit = () => {
+    // The function sends a put request to the /users/:id API endpoint with each
+    // form feild's input values.
     axios({
       method: 'put',
       url: '/api/v1/users/' + this.props.stateObj.id,
@@ -105,6 +121,8 @@ class Profile extends Component {
     })
     .then(response => {
       if (response.status === 200) {
+        // When a successful response is received, each form feild is cleared, and
+        // the App.js state is updated with the user's new information.
         this.profileForm[1].value = '';
         this.profileForm[2].value = '';
         this.profileForm[3].value = '';
@@ -122,9 +140,9 @@ class Profile extends Component {
           id: response.data.user._id,
           userImage: response.data.user.userImageURL,
           userEmail: response.data.user.email,
-          userLat: response.data.user.userCoordinates.lat || 40.75,
-          userLng: response.data.user.userCoordinates.lng || -74.02,
-          userZoom: response.data.user.userZoom || 12,
+          userLat: response.data.user.userCoordinates.lat,
+          userLng: response.data.user.userCoordinates.lng,
+          userZoom: response.data.user.userZoom,
           resMsg: response.data.message,
           resSuccess: response.data.success
         });
@@ -133,6 +151,7 @@ class Profile extends Component {
         });
       }
     }).catch((err) => {
+      // If there is an error, the Error component will be displayed with an error.
       this.props.updateUser({
         resMsg: err.response.data.message,
         resSuccess: 'Red'
@@ -143,10 +162,14 @@ class Profile extends Component {
     });
   }
 
+  // The submitHandler is called when the forms' submit buttons are clicked.
   submitHandler = (e) => {
     e.preventDefault();
     if (e.target.name === 'modalForm') {
+      // If the modal popup form for password changes is called.
       if (validate(this.modalForm)) {
+        // If the form fields' inputs are validated, a password field is added to the
+        // profile form.
         this.profileForm[6].value = this.modalForm[2].value;
         this.setState({
           formPassword: this.modalForm[2].value
@@ -156,20 +179,23 @@ class Profile extends Component {
       }
     } else {
       if (validate(this.profileForm)) {
+        // If the profile form is submitted and all field's are validated, the updateSubmit function
+        // is called.
         this.updateSubmit();
-      } else {
-        console.log('invalid');
       }
     }
   }
 
+  // The fileButtonChange function allows a user to add a profile image.
   fileButtonChange = (e) => {
     let file = e.target.files[0];
     let data = new FormData();
     data.append('userImage', file);
+    // The function sends a post request to the /user/userpic API endpoint including
+    // multipart/form-data image.
     axios({
       method: 'post',
-      url: '/api/v1/userpic',
+      url: '/api/v1/users/userpic',
       proxy: {
         host: '127.0.0.1',
         port: 3001
@@ -181,11 +207,15 @@ class Profile extends Component {
     })
     .then(response => {
       if (response.status === 201) {
+        // If a successfully created response is received, the image is displayed
+        // in the profile form.
         this.setState({
           fileButton: response.data.imageURL
         });
       }
     }).catch((err) => {
+      // If there is and error, the Error component is displayed with the error
+      // message.
       this.profileForm[8].value = '';
       this.props.updateUser({
         resMsg: err.response.data.message,
@@ -211,6 +241,7 @@ class Profile extends Component {
             <button type="submit" form="profile-form" className="btn btn-light my-2 btn-block" onClick={this.editHandler}>{this.state.editButtonText}</button>
           </div>
         </div>
+        {/*Profile Form*/}
         <form ref={form => this.profileForm = form} id="profile-form" onSubmit={this.submitHandler}>
           <div className="row">
             <div className="col-12 col-md-7 pt-4">
@@ -255,11 +286,12 @@ class Profile extends Component {
                 <span className="invalid-feedback"></span>
               </div>
               <div className="form-group">
+                {/*Modal Button for Password Change*/}
                 <button ref={this.changePasswordField} type="button" data-toggle="modal" data-target=".bd-example-modal-sm" disabled={this.state.notEditting} className="btn btn-light mb-4 mb-md-2 mt-2 btn-block border border-dark">Change Password</button>
-
               </div>
             </div>
             <div className="col-12 col-md-5 border-left1 set-border-1 border-dark1">
+              {/*Profile Image Container*/}
               <div className="container-fluid">
                 <div className="row border-bottom set-border-2 border-secondary">
                   <div className="col py-4 px-2">
@@ -278,7 +310,7 @@ class Profile extends Component {
             </div>
           </div>
         </form>
-
+        {/*Password Change Modal*/}
         <div className="modal fade bd-example-modal-sm" tabIndex="-1" role="dialog" id="myModal" aria-labelledby="mySmallModalLabel" aria-hidden="true">
           <div className="modal-dialog modal-sm">
             <div className="modal-content">
@@ -314,7 +346,6 @@ class Profile extends Component {
             </div>
           </div>
         </div>
-
       </div>
     );
   }

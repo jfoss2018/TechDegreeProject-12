@@ -10,65 +10,9 @@ const newError = require('./errors.js');
 const apiKeys = require('../../.config.js').apiKeys;
 const axios = require('axios');
 
-const storage = multer.diskStorage({
-  destination: function(req, file, cb) {
-    cb(null, './uploads/');
-  },
-  filename: function(req, file, cb) {
-    let dateString = new Date().toISOString();
-    let formattedDateString = dateString.replace(/:/g, "-");
-    cb(null, formattedDateString + "-" + file.originalname);
-  }
-});
-
-const fileFilter = (req, file, cb) => {
-  if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
-    cb(null, true);
-  } else {
-    cb(newError.picError(), false);
-  }
-};
-
-const upload = multer({
-  storage: storage,
-  limits: {
-    fileSize: 1024 * 1024 * 5
-  },
-  fileFilter: fileFilter
-});
-
-router.post('/users', function(req, res, next) {
-  const { userName, password, email } = req.body;
-
-  User.findOne({userName: userName}, function(err, user) {
-    if (err) {
-      return next(err);
-    } ////////////////////////////////////////////////////////////////////////////////////////////////
-    if (user) return next(newError.registrationError());
-    const brandNewUser = new User({
-        userName: userName,
-        password: password,
-        email: email,
-        userImageURL: 'uploads/default.png',
-        userCoordinates: {
-          lat: 38,
-          lng: -97
-        },
-        userZoom: 5
-    });
-    brandNewUser.save(function(err, newUser) {
-      if (err) {
-        return next(err);
-      } /////////////////////////////////////////////////////////////////////////////////////////////////
-      res.status(201).json(newUser);
-    });
-  });
-});
-
-router.post('/userpic', mid, upload.single('userImage'), function(req, res, next) {
-  res.status(201).json({imageURL: req.file.path});
-});
-
+// The updateUser function is used to help build an update object and response messages based
+// on what information is supplied in the put request, and if that information is valid or
+// not.
 function updateUser(req, res, updateObj, messageStr, successType, next) {
   User.findOne({_id: req.params.id}, function(err, user) {
     if (err) return next(newError.serverError());
@@ -98,11 +42,11 @@ function updateUser(req, res, updateObj, messageStr, successType, next) {
   });
 }
 
+// The returnUser function takes the configured update object and response messages and returns
+// the updated user and messages.
 function returnUser(req, res, user, updateObj, messageStr, successType, next) {
   user.update(updateObj, {runValidators: true}, function(err, result) {
-    if (err) {
-      return next(err);
-    } ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    if (err) return next(newError.serverError());
     User.findOne({_id: req.params.id}, function(err, updatedUser) {
       if (err) return next(newError.serverError());
       res.status('200').json({
@@ -114,7 +58,69 @@ function returnUser(req, res, user, updateObj, messageStr, successType, next) {
   });
 }
 
+// The storage constant specifies where to store image files and how the image should be named.
+const storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, './uploads/');
+  },
+  filename: function(req, file, cb) {
+    let dateString = new Date().toISOString();
+    let formattedDateString = dateString.replace(/:/g, "-");
+    cb(null, formattedDateString + "-" + file.originalname);
+  }
+});
+
+// The fileFilter function returns an error if anything other than a .jpg or .png file is supplied.
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+    cb(null, true);
+  } else {
+    cb(newError.picError(), false);
+  }
+};
+
+// The upload constant contains the configuration for the multipart/form-data for saving images.
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 1024 * 1024 * 5
+  },
+  fileFilter: fileFilter
+});
+
+// The /users POST route is used for creating new users.
+router.post('/users', function(req, res, next) {
+  const { userName, password, email } = req.body;
+  User.findOne({userName: userName}, function(err, user) {
+    if (err) return next(newError.serverError());
+    if (user) return next(newError.registrationError());
+    const brandNewUser = new User({
+        userName: userName,
+        password: password,
+        email: email,
+        userImageURL: 'uploads/default.png',
+        userCoordinates: {
+          lat: 38,
+          lng: -97
+        },
+        userZoom: 5
+    });
+    brandNewUser.save(function(err, newUser) {
+      if (err) return next(newError.serverError());
+      res.status(201).json(newUser);
+    });
+  });
+});
+
+// The /users/userpic POST route is used for saving new profile images to the uploads folder.
+router.post('/users/userpic', mid, upload.single('userImage'), function(req, res, next) {
+  res.status(201).json({imageURL: req.file.path});
+});
+
+// The /users/:id PUT route is used to update the current user in the database.
 router.put('/users/:id', mid, function(req, res, next) {
+  // The updateObj, messageStr, and successType are updated depending on what
+  // is supplied in the request, and whether or not that information is valid.
   const updateObj = {};
   let messageStr;
   let successType;
@@ -161,12 +167,8 @@ router.put('/users/:id', mid, function(req, res, next) {
   }
 });
 
-/*
-router.get('/users/:id/profile', mid.authenticationMiddleware, function(req, res, next) {
-  const userID = req.params.id;
-
-});
-*/
+// The /users/login POST route is used to login a user. This will also create a user session, and
+// uses passport's local stategy for user authentication.
 router.post('/users/login', passport.authenticate('local'), function(req, res, next) {
   res.status('200').json({
     username: req.user.userName,
@@ -179,45 +181,25 @@ router.post('/users/login', passport.authenticate('local'), function(req, res, n
   });
 });
 
-
+// The /users/logout POST route is used to log out the current user, and it deletes the user session.
 router.post('/users/logout', function(req, res, next) {
     if (req.user) {
         req.logout();
-        res.status = 200;
-        res.json({message: 'Logged Out'});
+        res.status('200').json({message: 'Logged Out'});
     } else {
-        res.status = 400;
-        res.json({message: 'No user to logout'});
+        res.status('400').json({message: 'No user to logout'});
     }
 });
-/*
-router.post(
-    '/login',
-    function (req, res, next) {
-        console.log('routes/user.js, login, req.body: ');
-        console.log(req.body)
-        next()
-    },
-    passport.authenticate('local'),
-    (req, res) => {
-        console.log('logged in', req.user);
-        var userInfo = {
-            username: req.user.username
-        };
-        res.send(userInfo);
-    }
-)
-*/
 
+// The /users/:id/searches GET route returns all searches performed by the current user.
 router.get('/users/:id/searches', mid, function(req, res, next) {
   Search.find({user: req.params.id}, null, {sort: {postedOn: -1}}, function(err, searches) {
-    if (err) {
-      return next(err);
-    } ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    if (err) return next(newError.serverError());
     res.status('200').json(searches);
   });
 });
 
+// The /users/:id/searches POST route returns the weather search and a corresponding gif from Giphy.
 router.post('/users/:id/searches', mid, midTime, function(req, res, next) {
   axios({
     method: 'get',
@@ -229,6 +211,7 @@ router.post('/users/:id/searches', mid, midTime, function(req, res, next) {
       url: `http://api.giphy.com/v1/gifs/search?q=${response.data.weather[0].description}&api_key=${apiKeys.giphy}&limit=1`
     })
     .then(gifResponse => {
+      // Open Weather API returns degrees for wind direction. Here, the degree is transformed into a direction.
       const windDeg = response.data.wind.deg;
       let windDir;
       if (windDeg >= 0 && windDeg <= 22.5) {windDir = 'N';}
@@ -274,10 +257,5 @@ router.post('/users/:id/searches', mid, midTime, function(req, res, next) {
     next(newError.serverError());
   });
 });
-/*
-router.get('/users/:id/profile', mid, function(req, res, next) {
-  res.status = 200;
-  res.json('yup');
-});
-*/
+
 module.exports = router
