@@ -188,6 +188,12 @@ class Profile extends Component {
 
   // The fileButtonChange function allows a user to add a profile image.
   fileButtonChange = (e) => {
+    if (!e.target.files[0]) {
+      this.setState({
+        fileButton: this.props.stateObj.userImage
+      });
+      return;
+    }
     let file = e.target.files[0];
     let data = new FormData();
     data.append('userImage', file);

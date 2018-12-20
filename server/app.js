@@ -3,6 +3,7 @@ const app = express();
 const mongoose = require('mongoose');
 const routes = require('./routes/routes.js');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const { apiKeys, secret } = require('../.config.js');
 const db = require('./database/index.js');
 const session = require('express-session');
@@ -29,10 +30,11 @@ app.use(session({
   saveUninitialized: false
 }));
 
-
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use('/uploads', express.static('uploads'));
+
+app.use(cookieParser());
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -48,12 +50,20 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
+app.use(function(req, res, next) {
+  const err = new Error('Not Found');
+  err.status = 404;
+  next(err);
+});
+
 app.use(function(err, req, res, next) {
   res.status(err.status || 500).json({message: err.message});
 });
 
 const port = process.env.PORT || 3001;
 
-app.listen(port, function(err) {
+const server = app.listen(port, function(err) {
   console.log('This app is listening on port ' + port);
 });
+
+module.exports = server;

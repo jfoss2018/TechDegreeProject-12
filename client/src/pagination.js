@@ -97,5 +97,4 @@ function newPage(itemCount, pages, page, pageObj, searches) {
   }
 }
 
-
 export { pageSetUp, pagination };

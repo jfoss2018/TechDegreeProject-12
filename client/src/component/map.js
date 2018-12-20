@@ -77,7 +77,7 @@ class Map extends Component {
       this.state.markers.push(marker);
       // The info window corresponding to the created marker is filled with the following content.
       infoWindow.setContent(`
-        <div class="container-fluid">
+        <div class="container">
           <div class="row">
             <div class="col-12 col-md-6 col-lg-4">
               <div class="row">
@@ -98,10 +98,10 @@ class Map extends Component {
                   <p><strong>Current condition:</strong> ${response.data.weather.main} with ${response.data.weather.description}</p>
                 </div>
                 <div class="col-12">
-                  <p><strong>Current temp:</strong> ${response.data.temperature.current} &#8457; <strong>High:</strong> ${response.data.temperature.max} &#8457; <strong>Low:</strong> ${response.data.temperature.min} &#8457;</p>
+                  <p class="white-space"><strong>Current temp:</strong> ${response.data.temperature.current} &#8457;  |  <strong>High:</strong> ${response.data.temperature.max} &#8457;  |  <strong>Low:</strong> ${response.data.temperature.min} &#8457;</p>
                 </div>
                 <div class="col-12">
-                  <p><strong>Wind Speed:</strong> ${response.data.wind.speed} mph in the <strong>${response.data.wind.dir}</strong> direction</p>
+                  <p><strong>Wind Speed:</strong> ${response.data.wind.speed} mph from the <strong>${response.data.wind.dir}</strong> direction</p>
                 </div>
               </div>
             </div>

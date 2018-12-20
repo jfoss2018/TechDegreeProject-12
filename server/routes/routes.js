@@ -45,8 +45,8 @@ function updateUser(req, res, updateObj, messageStr, successType, next) {
 // The returnUser function takes the configured update object and response messages and returns
 // the updated user and messages.
 function returnUser(req, res, user, updateObj, messageStr, successType, next) {
-  user.update(updateObj, {runValidators: true}, function(err, result) {
-    if (err) return next(newError.serverError());
+  user.updateOne(updateObj, {runValidators: true}, function(err, result) {
+    if (err) return next(err);
     User.findOne({_id: req.params.id}, function(err, updatedUser) {
       if (err) return next(newError.serverError());
       res.status('200').json({
@@ -107,14 +107,14 @@ router.post('/users', function(req, res, next) {
     });
     brandNewUser.save(function(err, newUser) {
       if (err) return next(newError.serverError());
-      res.status(201).json(newUser);
+      res.status('201').json(newUser);
     });
   });
 });
 
 // The /users/userpic POST route is used for saving new profile images to the uploads folder.
 router.post('/users/userpic', mid, upload.single('userImage'), function(req, res, next) {
-  res.status(201).json({imageURL: req.file.path});
+  res.status('201').json({imageURL: req.file.path});
 });
 
 // The /users/:id PUT route is used to update the current user in the database.
@@ -194,7 +194,11 @@ router.post('/users/logout', function(req, res, next) {
 // The /users/:id/searches GET route returns all searches performed by the current user.
 router.get('/users/:id/searches', mid, function(req, res, next) {
   Search.find({user: req.params.id}, null, {sort: {postedOn: -1}}, function(err, searches) {
-    if (err) return next(newError.serverError());
+    if (err) {
+      const error = new Error('Not Found');
+      error.status = 404;
+      return next(error);
+    }
     res.status('200').json(searches);
   });
 });
@@ -247,6 +251,7 @@ router.post('/users/:id/searches', mid, midTime, function(req, res, next) {
         gifURL: gifResponse.data.data[0].images.fixed_width.url
       })
       newSearch.save(function(err, search) {
+        if (err) return next(err);
         res.status('200').json(search);
       });
     })

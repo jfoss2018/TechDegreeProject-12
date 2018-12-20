@@ -75,6 +75,16 @@ strong {
   font-weight: bold;
 }
 
+.white-space {
+  white-space: pre;
+}
+
+.profile-image {
+  padding: 5px;
+  border: 2px solid black;
+  background-color: white;
+}
+
 @media screen and (min-width: 768px) {
   .set-border-1 {
     border-left: 1px solid black;

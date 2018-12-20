@@ -1,11 +1,8 @@
 const mongoose = require('mongoose');
-const databaseKey = require('../../.config.js').databaseKey;
-
-// This file sets up the app's connection to MongoDB using mlab.
-const mongodbURI = `mongodb://${databaseKey.user}:${databaseKey.password}@ds161183.mlab.com:61183/heroku_ljvqjwlq`;
+const config = require('./databaseConfig.js');
 
 // Connects the the database using the above URI.
-mongoose.connect(mongodbURI, {useNewUrlParser: true});
+mongoose.connect(config.mongoURI[process.env.NODE_ENV], {useNewUrlParser: true});
 const db = mongoose.connection;
 
 db.on('error', function(err) {
