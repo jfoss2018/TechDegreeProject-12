@@ -210,11 +210,11 @@ class Login extends Component {
                       <div className="form-group">
                         <div className="form-group">
                           <label htmlFor="userNameLogin">Username</label>
-                          <input type="text" required className="form-control" id="userNameLogin" aria-describedby="emailHelp" name="userNameLogin" placeholder="Enter Username" onChange={this.handleOnChange} />
+                          <input type="text" autoComplete="off" required className="form-control" id="userNameLogin" aria-describedby="emailHelp" name="userNameLogin" placeholder="Enter Username" onChange={this.handleOnChange} />
                         </div>
                         <div className="form-group">
                           <label htmlFor="passwordLogin">Password</label>
-                          <input type="password" className="form-control" name="passwordLogin" id="passwordLogin" placeholder="Enter Password" onChange={this.handleOnChange} />
+                          <input type="password" autoComplete="off" className="form-control" name="passwordLogin" id="passwordLogin" placeholder="Enter Password" onChange={this.handleOnChange} />
                         </div>
                         <br />
                         <button type="submit" name="login" className="btn btn-primary" onClick={this.handleSubmit}>Submit</button>
@@ -236,22 +236,22 @@ class Login extends Component {
                     <form ref={form => this.registerForm = form} onSubmit={this.handleSubmit} className="my-3" noValidate>
                       <div className="form-group">
                         <label htmlFor="userName">Username</label>
-                        <input type="text" className="form-control" required minLength="4" maxLength="16" id="userName" name="userName" placeholder="Enter Username" onChange={this.handleOnChange} />
+                        <input type="text" autoComplete="off" className="form-control" required minLength="4" maxLength="16" id="userName" name="userName" placeholder="Enter Username" onChange={this.handleOnChange} />
                         <span className="invalid-feedback"></span>
                       </div>
                       <div className="form-group">
                         <label htmlFor="email">Email</label>
-                        <input type="email" required className="form-control" id="email" aria-describedby="emailHelp" name="email" placeholder="Enter Email" onChange={this.handleOnChange} />
+                        <input type="email" autoComplete="off" required className="form-control" id="email" aria-describedby="emailHelp" name="email" placeholder="Enter Email" onChange={this.handleOnChange} />
                         <span className="invalid-feedback"></span>
                       </div>
                       <div className="form-group">
                         <label htmlFor="password">Password</label>
-                        <input type="password" className="form-control" required minLength="8" maxLength="20" name="password" id="password" placeholder="Enter Password" onChange={this.handleOnChange} />
+                        <input type="text" autoComplete="off" className="form-control" required minLength="8" maxLength="20" name="password" id="password" placeholder="Enter Password" onChange={this.handleOnChange} />
                         <span className="invalid-feedback"></span>
                       </div>
                       <div className="form-group">
                         <label htmlFor="confirmPassword">Confirm Password</label>
-                        <input type="password" className="form-control" name="confirmPassword" required minLength="8" maxLength="20" id="confirmPassword" placeholder="Confirm Password" onChange={this.handleOnChange} />
+                        <input type="text" autoComplete="off" className="form-control" name="confirmPassword" required minLength="8" maxLength="20" id="confirmPassword" placeholder="Confirm Password" onChange={this.handleOnChange} />
                         <span className="invalid-feedback c-pass"></span>
                       </div>
                       <button type="submit" name="register" className="btn btn-primary">Submit</button>

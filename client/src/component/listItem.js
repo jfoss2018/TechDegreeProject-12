@@ -11,17 +11,17 @@ const ListItem = (props) => {
 
   return (
     <li className="list-item">
-      <div className="row border border-dark m-0 p-0 text-center">
-        <div className="col-3 bg-white border-right border-left border-dark px-0">
+      <div className="row m-0 p-0 text-center">
+        <div className="col-3 bg-white border border-dark px-0">
           <p className="modal-text">{props.weather.city}</p>
         </div>
-        <div className="col-3 bg-white border-right border-left border-dark px-0">
+        <div className="col-3 bg-white border border-dark px-0">
           <p className="modal-text">{newD}</p>
         </div>
-        <div className="col-3 bg-white border-right border-left border-dark px-0">
+        <div className="col-3 bg-white border border-dark px-0">
           <p className="modal-text">{props.weather.weather.main}</p>
         </div>
-        <div className="col-3 bg-white border-right border-left border-dark px-0">
+        <div className="col-3 bg-white border border-dark px-0">
           <p className="modal-text">{props.weather.temperature.current} &#8457;</p>
         </div>
       </div>

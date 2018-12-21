@@ -79,7 +79,7 @@ const DashboardPanel = (props) => {
                 <div className="col-12 text-dark">
                   <div className="modal-body">
                     {/*Headings for Search History*/}
-                    <div className="row border border-dark text-center">
+                    <div className="row text-center">
                       <div className="col-3 bg-white border border-dark px-0">
                         <p className="modal-text"><strong>City:</strong></p>
                       </div>

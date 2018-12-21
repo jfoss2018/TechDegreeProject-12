@@ -67,4 +67,3 @@ uploads/*
 
 # exception to the rule
 !uploads/default.png
-!uploads/giphy.gif

@@ -188,6 +188,12 @@ class Profile extends Component {
 
   // The fileButtonChange function allows a user to add a profile image.
   fileButtonChange = (e) => {
+    if (!e.target.files[0]) {
+      this.setState({
+        fileButton: this.props.stateObj.userImage
+      });
+      return;
+    }
     let file = e.target.files[0];
     let data = new FormData();
     data.append('userImage', file);
@@ -247,12 +253,12 @@ class Profile extends Component {
             <div className="col-12 col-md-7 pt-4">
               <div className="form-group">
                 <label forhtml="userName">Username</label>
-                <input type="text" className="form-control" minLength="4" maxLength="16" disabled={this.state.notEditting} onChange={this.handleOnChange} name="userName" id="userName" placeholder={this.props.stateObj.currentUser} />
+                <input type="text" autoComplete="off" className="form-control" minLength="4" maxLength="16" disabled={this.state.notEditting} onChange={this.handleOnChange} name="userName" id="userName" placeholder={this.props.stateObj.currentUser} />
                 <span className="invalid-feedback"></span>
               </div>
               <div className="form-group">
                 <label forhtml="email">Email</label>
-                <input type="email" className="form-control" disabled={this.state.notEditting} onChange={this.handleOnChange} name="email" id="email" placeholder={this.props.stateObj.userEmail} />
+                <input type="email" autoComplete="off" className="form-control" disabled={this.state.notEditting} onChange={this.handleOnChange} name="email" id="email" placeholder={this.props.stateObj.userEmail} />
                 <span className="invalid-feedback"></span>
               </div>
               <div className="container-fluid">
@@ -260,21 +266,21 @@ class Profile extends Component {
                   <div className="col-12 col-sm-4 px-0 pr-sm-1">
                     <div className="form-group">
                       <label forhtml="lat">Latitude</label>
-                      <input type="number" step="0.01" min="-90" max="90" className="form-control" disabled={this.state.notEditting} onChange={this.handleOnChange} name="lat" id="lat" placeholder={this.props.stateObj.userLat} />
+                      <input type="number" autoComplete="off" step="0.01" min="-90" max="90" className="form-control" disabled={this.state.notEditting} onChange={this.handleOnChange} name="lat" id="lat" placeholder={this.props.stateObj.userLat} />
                       <span className="invalid-feedback"></span>
                     </div>
                   </div>
                   <div className="col-12 col-sm-4 px-0 px-sm-1">
                     <div className="form-group">
                       <label forhtml="lng">Longitude</label>
-                      <input type="number" step="0.01" className="form-control" min="-180" max="180" disabled={this.state.notEditting} onChange={this.handleOnChange} name="lng" placeholder={this.props.stateObj.userLng} />
+                      <input type="number" autoComplete="off" step="0.01" className="form-control" min="-180" max="180" disabled={this.state.notEditting} onChange={this.handleOnChange} name="lng" placeholder={this.props.stateObj.userLng} />
                       <span className="invalid-feedback"></span>
                     </div>
                   </div>
                   <div className="col-12 col-sm-4 px-0 pl-sm-1">
                     <div className="form-group">
                       <label forhtml="zoom">Zoom</label>
-                      <input type="number" step="0.01" className="form-control" min="3" max="16" disabled={this.state.notEditting} onChange={this.handleOnChange} name="zoom" id="zoom" placeholder={this.props.stateObj.userZoom} />
+                      <input type="number" autoComplete="off" step="0.01" className="form-control" min="3" max="16" disabled={this.state.notEditting} onChange={this.handleOnChange} name="zoom" id="zoom" placeholder={this.props.stateObj.userZoom} />
                       <span className="invalid-feedback"></span>
                     </div>
                   </div>
@@ -282,7 +288,7 @@ class Profile extends Component {
               </div>
               <div className="form-group hidden-div" hidden>
                 <label forhtml="formPassword">Password</label>
-                <input type="password" className="form-control" minLength="8" maxLength="20" disabled onChange={this.handleOnChange} name="formPassword" id="formPassword" />
+                <input type="password" autoComplete="off" className="form-control" minLength="8" maxLength="20" disabled onChange={this.handleOnChange} name="formPassword" id="formPassword" />
                 <span className="invalid-feedback"></span>
               </div>
               <div className="form-group">
@@ -324,17 +330,17 @@ class Profile extends Component {
                 <div className="modal-body">
                   <div className="form-group">
                     <label forhtml="originalPassword">Current Password</label>
-                    <input type="password" required minLength="8" maxLength="20" onChange={this.handleOnChange}className="form-control" name="originalPassword" id="originalPassword" />
+                    <input type="text" autoComplete="off" required minLength="8" maxLength="20" onChange={this.handleOnChange}className="form-control" name="originalPassword" id="originalPassword" />
                     <span className="invalid-feedback"></span>
                   </div>
                   <div className="form-group">
                     <label forhtml="newPassword">New Password</label>
-                    <input type="password" required minLength="8" maxLength="20" onChange={this.handleOnChange} className="form-control" name="password" id="newPassword" />
+                    <input type="text" autoComplete="off" required minLength="8" maxLength="20" onChange={this.handleOnChange} className="form-control" name="password" id="newPassword" />
                     <span className="invalid-feedback"></span>
                   </div>
                   <div className="form-group">
                     <label forhtml="confirmPassword">Confirm New Password</label>
-                    <input type="password" required minLength="8" maxLength="20" onChange={this.handleOnChange} className="form-control" name="confirmPassword" id="confirmPassword" />
+                    <input type="text" autoComplete="off" required minLength="8" maxLength="20" onChange={this.handleOnChange} className="form-control" name="confirmPassword" id="confirmPassword" />
                     <span className="invalid-feedback c-pass"></span>
                   </div>
                 </div>

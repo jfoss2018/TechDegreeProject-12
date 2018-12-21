@@ -7,8 +7,8 @@ module.exports.authenticate = function(req, res, next) {
   if (req.isAuthenticated()) {
     return next();
   }
-  // If the user is not authenticated, they are redirected home.
-  res.redirect('/');
+  // If the user is not authenticated, returns a not authorized response.
+  res.status('401').json({message: 'Not Authorized'});
 }
 
 // The timeout middleware tests the current search's coordinates against all searches
@@ -17,12 +17,15 @@ module.exports.authenticate = function(req, res, next) {
 // The reason for this is due to the Open Weather API stating not to perform repetitive
 // searches for a single location more than once every 10 minutes.
 module.exports.timeout = function(req, res, next) {
+  let newDate = new Date();
+  let offSet = newDate.getTimezoneOffset() * 60000;
+  let localDate = newDate - offSet;
   let sendRes = false;
   const latHigh = parseFloat(req.body.lat) + .1;
   const latLow = parseFloat(req.body.lat) - .1;
   const lngHigh = parseFloat(req.body.lng) + .13;
   const lngLow = parseFloat(req.body.lng) - .13;
-  Search.find({postedOn: {$gte: (Date.now() - 600000)}}, function(err, searches) {
+  Search.find({postedOn: {$gte: (localDate - 600000)}}, function(err, searches) {
     if (err) return next(newError.serverError());
     for (let i = 0; i < searches.length; i += 1) {
       const sLat = searches[i].coordinates.lat;

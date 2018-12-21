@@ -75,6 +75,35 @@ strong {
   font-weight: bold;
 }
 
+.white-space {
+  white-space: pre;
+}
+
+.profile-image {
+  padding: 5px;
+  border: 2px solid black;
+  background-color: white;
+}
+
+.error-404 {
+  color: red;
+  margin-top: 50px;
+  font-size: 50px;
+  font-weight: bold;
+  border: 1px solid black;
+  background-color: white;
+}
+
+.page-404 {
+  background: repeating-linear-gradient(
+    45deg,
+    yellow,
+    yellow 50px,
+    black 50px,
+    black 100px
+  );
+}
+
 @media screen and (min-width: 768px) {
   .set-border-1 {
     border-left: 1px solid black;
