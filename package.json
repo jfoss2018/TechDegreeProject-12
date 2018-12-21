@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "Project 12",
   "main": "server/app.js",
+  "engines": {
+    "node": ">=10.9.0",
+    "npm": ">=6.2.0"
+  },
   "scripts": {
     "start": "node server/app.js",
     "server": "set NODE_ENV=development&& node server/app.js",
