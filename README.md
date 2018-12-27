@@ -48,7 +48,7 @@ This will install all the dependencies for the server-side of this project. You 
 ```
 cd client
 ```
-then
+then run:
 ```
 npm install
 ```
@@ -65,11 +65,27 @@ If you would like to start this application in a development environment, note t
 npm run dev
 ```
 
-For a production build, run:
+For a production build, first run the build script in the 'TechDegreeProject-12' directory:
 
+```
+cd client
+```
+then run:
+```
+npm run build
+```
+
+Once the production build is complete, navigate back to the project folder:
+
+```
+cd ..
+```
+then run:
 ```
 npm start
 ```
+
+You can now navigate to localhost:3001 in your browser to view this web app.
 
 ### Testing
 
