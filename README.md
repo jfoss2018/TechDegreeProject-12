@@ -43,7 +43,7 @@ Once you have downloaded this project, navigate to the folder in which the proje
 npm install
 ```
 
-This will install all the dependencies for the server-side of this project. You will also need to install all the dependencies for the React from-end by navigating into the client folder and installing once again:
+This will install all the dependencies for the server-side of this project. You will also need to install all the dependencies for the React front-end by navigating into the client folder and installing once again:
 
 ```
 cd client
@@ -65,7 +65,7 @@ If you would like to start this application in a development environment, note t
 npm run dev
 ```
 
-For a production build, first run the build script in the 'TechDegreeProject-12' directory:
+For a production build, first run the build script in the 'TechDegreeProject-12/client' directory:
 
 ```
 cd client
@@ -95,7 +95,7 @@ You will need to make sure that the mongoDB daemon is running in order to run th
 mongod.exe
 ```
 
-This will start up the MongoDB daemon. Then run:
+This will start up the MongoDB daemon. Then, back in the project directory, run:
 
 ```
 npm test
