@@ -112,6 +112,15 @@ router.post('/users', function(req, res, next) {
   });
 });
 
+// The /users GET route is used to return the current user information when the page gets
+// refreshed when a non-existant route is navigated to.
+router.get('/users', mid, function(req, res, next) {
+  if (!req.user) {
+    return next();
+  }
+  res.status('200').json(req.user);
+});
+
 // The /users/userpic POST route is used for saving new profile images to the uploads folder.
 router.post('/users/userpic', mid, upload.single('userImage'), function(req, res, next) {
   res.status('201').json({imageURL: req.file.path});

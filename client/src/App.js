@@ -184,7 +184,7 @@ class App extends Component {
               <Route exact path="/dashboard" render={() => <Dashboard pageNum={this.state.pageNum} paging={this.paging} getSearches={this.getSearches} updateUser={this.updateUser} load={'Map'} stateObj={this.state} />} />
               <Route exact path="/profile" render={() => <Dashboard pageNum={this.state.pageNum} paging={this.paging} getSearches={this.getSearches} updateUser={this.updateUser} load={'Profile'} stateObj={this.state} />} />
               <Route exact path="/login" render={() => <Login updateUser={this.updateUser} />} />
-              <Route component={NotFound} />
+              <Route render={() => <NotFound updateUser={this.updateUser} />} />
             </Switch>
             <Footer />
           </div>

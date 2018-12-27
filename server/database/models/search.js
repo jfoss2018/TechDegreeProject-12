@@ -13,12 +13,7 @@ const SearchSchema = new Schema({
   },
   postedOn: {
     type: Date,
-    default: function() {
-      let newDate = new Date();
-      let offSet = newDate.getTimezoneOffset() * 60000;
-      let localDate = newDate - offSet;
-      return localDate;
-    },
+    default: Date.now,
     required: [true, 'Date required for search.']
   },
   city: String,

@@ -5,6 +5,7 @@ import ListBtnItem from './listBtnItem.js';
 
 // The Dashboard Panel contains User and recent search information.
 const DashboardPanel = (props) => {
+
   return (
     // User Info
     <div className="container-fluid">

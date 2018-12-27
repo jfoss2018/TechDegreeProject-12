@@ -246,12 +246,12 @@ class Login extends Component {
                       </div>
                       <div className="form-group">
                         <label htmlFor="password">Password</label>
-                        <input type="text" autoComplete="off" className="form-control" required minLength="8" maxLength="20" name="password" id="password" placeholder="Enter Password" onChange={this.handleOnChange} />
+                        <input type="password" autoComplete="off" className="form-control" required minLength="8" maxLength="20" name="password" id="password" placeholder="Enter Password" onChange={this.handleOnChange} />
                         <span className="invalid-feedback"></span>
                       </div>
                       <div className="form-group">
                         <label htmlFor="confirmPassword">Confirm Password</label>
-                        <input type="text" autoComplete="off" className="form-control" name="confirmPassword" required minLength="8" maxLength="20" id="confirmPassword" placeholder="Confirm Password" onChange={this.handleOnChange} />
+                        <input type="password" autoComplete="off" className="form-control" name="confirmPassword" required minLength="8" maxLength="20" id="confirmPassword" placeholder="Confirm Password" onChange={this.handleOnChange} />
                         <span className="invalid-feedback c-pass"></span>
                       </div>
                       <button type="submit" name="register" className="btn btn-primary">Submit</button>

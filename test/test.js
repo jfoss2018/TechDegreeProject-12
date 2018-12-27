@@ -211,7 +211,7 @@ describe('API Routes', function() {
   });
 
   describe('/users/userpic POST', function() {
-    this.timeout(10000);
+    this.timeout(15000);
     before(function(done) {
       fs.readFile('./uploads/default.png', (err, imageData) => {
         file = imageData;
@@ -247,6 +247,21 @@ describe('API Routes', function() {
         .then((err, res) => {
           err.should.be.json;
           err.should.have.status('400');
+          done();
+        });
+    });
+  });
+
+  describe('/users GET', function() {
+    it('should respond with the current user with session', function(done) {
+      authUser
+        .get(`/api/v1/users`)
+        .then(res => {
+          res.should.be.json;
+          res.should.have.status('200');
+          res.body.should.have.property('_id');
+          res.body.should.have.property('userName');
+          res.body.userName.should.equal('test');
           done();
         });
     });

@@ -330,17 +330,17 @@ class Profile extends Component {
                 <div className="modal-body">
                   <div className="form-group">
                     <label forhtml="originalPassword">Current Password</label>
-                    <input type="text" autoComplete="off" required minLength="8" maxLength="20" onChange={this.handleOnChange}className="form-control" name="originalPassword" id="originalPassword" />
+                    <input type="password" autoComplete="off" required minLength="8" maxLength="20" onChange={this.handleOnChange}className="form-control" name="originalPassword" id="originalPassword" />
                     <span className="invalid-feedback"></span>
                   </div>
                   <div className="form-group">
                     <label forhtml="newPassword">New Password</label>
-                    <input type="text" autoComplete="off" required minLength="8" maxLength="20" onChange={this.handleOnChange} className="form-control" name="password" id="newPassword" />
+                    <input type="password" autoComplete="off" required minLength="8" maxLength="20" onChange={this.handleOnChange} className="form-control" name="password" id="newPassword" />
                     <span className="invalid-feedback"></span>
                   </div>
                   <div className="form-group">
                     <label forhtml="confirmPassword">Confirm New Password</label>
-                    <input type="text" autoComplete="off" required minLength="8" maxLength="20" onChange={this.handleOnChange} className="form-control" name="confirmPassword" id="confirmPassword" />
+                    <input type="password" autoComplete="off" required minLength="8" maxLength="20" onChange={this.handleOnChange} className="form-control" name="confirmPassword" id="confirmPassword" />
                     <span className="invalid-feedback c-pass"></span>
                   </div>
                 </div>

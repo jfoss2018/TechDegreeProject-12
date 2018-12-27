@@ -60,10 +60,13 @@ typings/
 # next.js build output
 .next
 
-.config.js
+
 
 # exclude everything
 uploads/*
 
 # exception to the rule
 !uploads/default.png
+!uploads/giphy.gif
+
+.config.js
