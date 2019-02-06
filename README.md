@@ -1,8 +1,14 @@
 # TechDegreeProject-12
 
-This project uses Node.js, Express, MongoDB and React to create a Full-Stack web application including a semi-RESTful API that enables users to save and retrieve user and search information in a database.
+This project utilizes Node.js, Express, MongoDB and React to create a Full-Stack web application including a semi-RESTful API that enables users to save and retrieve user and search information in a database. It also introduces the use of popular web APIs including Google Maps, Giphy, and Open Weather to help build the functional use of this web app.
 
-### Prerequisites
+### What does it do?
+
+This web app allows the user to create an account and easily request current weather conditions anywhere in the world by clicking on a map.
+
+### Additional Project Info for Grading
+
+#### Prerequisites
 
 This web requires API keys, database configuration, and session configuration to work properly.
 
@@ -35,7 +41,7 @@ module.exports.secret = secret;
 
 This app also includes a tutorial video on the home page that is too large to commit to Git Hub, so this repository will not contain that video file. Fortunately, this app is very easy to use.
 
-### Installing
+#### Installing
 
 Once you have downloaded this project, navigate to the folder in which the project is stored in your command-line or terminal and run
 
@@ -87,7 +93,7 @@ npm start
 
 You can now navigate to localhost:3001 in your browser to view this web app.
 
-### Testing
+#### Testing
 
 You will need to make sure that the mongoDB daemon is running in order to run the test script for this project. Navigate to the folder in which the MongoDB executables are and run
 
